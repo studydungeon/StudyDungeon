@@ -1,0 +1,2345 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚔️ STUDY DUNGEON — Αρχαίοι Ιστοριογράφοι Α΄ Λυκείου</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #07070f;
+  --bg2:      #0c0c1e;
+  --bg3:      #111128;
+  --neon-p:   #ff2d78;
+  --neon-g:   #00ff9f;
+  --neon-b:   #00d4ff;
+  --neon-v:   #a855f7;
+  --neon-o:   #ff9500;
+  --neon-y:   #ffd700;
+  --glass:    rgba(255,255,255,0.04);
+  --glass2:   rgba(255,255,255,0.07);
+  --border:   rgba(255,255,255,0.09);
+  --text:     #e2e8f0;
+  --muted:    #94a3b8;
+  --font-h:   'Orbitron', monospace;
+  --font-b:   'Rajdhani', sans-serif;
+  --font-m:   'Share Tech Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-b);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: .5;
+}
+
+/* ── PROGRESS BAR ── */
+#progress-wrap {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 52px;
+  background: rgba(7,7,15,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 20px;
+  z-index: 1000;
+}
+#progress-bar-outer {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 99px;
+  overflow: hidden;
+}
+#progress-bar-inner {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--neon-p), var(--neon-v), var(--neon-b), var(--neon-g));
+  border-radius: 99px;
+  transition: width .15s ease;
+  box-shadow: 0 0 12px var(--neon-b);
+}
+#progress-label {
+  font-family: var(--font-m);
+  font-size: 11px;
+  color: var(--neon-b);
+  white-space: nowrap;
+  min-width: 90px;
+  text-align: right;
+}
+#progress-xp {
+  font-family: var(--font-m);
+  font-size: 11px;
+  color: var(--neon-y);
+  white-space: nowrap;
+}
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px 60px;
+  position: relative;
+  overflow: hidden;
+}
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(168,85,247,.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(0,212,255,.12) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(255,45,120,.12) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  font-family: var(--font-m);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--neon-v);
+  border: 1px solid rgba(168,85,247,.4);
+  padding: 6px 18px;
+  border-radius: 99px;
+  margin-bottom: 28px;
+  text-transform: uppercase;
+}
+#hero h1 {
+  font-family: var(--font-h);
+  font-size: clamp(2rem, 6vw, 4.2rem);
+  font-weight: 900;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #fff 0%, var(--neon-b) 40%, var(--neon-v) 70%, var(--neon-p) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+  text-shadow: none;
+}
+#hero .subtitle {
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 560px;
+  margin-bottom: 40px;
+}
+.hero-stats {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 48px;
+}
+.hero-stat {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 24px;
+  text-align: center;
+}
+.hero-stat .val {
+  font-family: var(--font-h);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.hero-stat .lbl { font-size: .8rem; color: var(--muted); }
+
+.start-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--neon-v), var(--neon-p));
+  color: #fff;
+  font-family: var(--font-h);
+  font-size: .85rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+  padding: 16px 48px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  box-shadow: 0 0 30px rgba(168,85,247,.4), 0 0 60px rgba(168,85,247,.15);
+  transition: transform .2s, box-shadow .2s;
+}
+.start-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 40px rgba(168,85,247,.6), 0 0 80px rgba(168,85,247,.25);
+}
+
+/* ── QUICK NAV ── */
+#level-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 32px 24px;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.nav-pill {
+  font-family: var(--font-h);
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 99px;
+  border: 1px solid;
+  text-transform: uppercase;
+  transition: all .2s;
+}
+.nav-pill:hover { transform: translateY(-2px); }
+.nav-l1 { color: var(--neon-p); border-color: rgba(255,45,120,.4); }
+.nav-l1:hover { background: rgba(255,45,120,.15); box-shadow: 0 0 16px rgba(255,45,120,.3); }
+.nav-l2 { color: var(--neon-g); border-color: rgba(0,255,159,.4); }
+.nav-l2:hover { background: rgba(0,255,159,.15); box-shadow: 0 0 16px rgba(0,255,159,.3); }
+.nav-l3 { color: var(--neon-b); border-color: rgba(0,212,255,.4); }
+.nav-l3:hover { background: rgba(0,212,255,.15); box-shadow: 0 0 16px rgba(0,212,255,.3); }
+.nav-l4 { color: var(--neon-o); border-color: rgba(255,149,0,.4); }
+.nav-l4:hover { background: rgba(255,149,0,.15); box-shadow: 0 0 16px rgba(255,149,0,.3); }
+.nav-l5 { color: var(--neon-v); border-color: rgba(168,85,247,.4); }
+.nav-l5:hover { background: rgba(168,85,247,.15); box-shadow: 0 0 16px rgba(168,85,247,.3); }
+
+/* ── MAIN LAYOUT ── */
+main { padding: 0 0 80px; }
+
+/* ── LEVEL HEADER ── */
+.level-header {
+  position: relative;
+  padding: 60px 40px 40px;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+.level-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: .07;
+}
+.l1 .level-header::before { background: radial-gradient(ellipse at left, var(--neon-p), transparent 70%); }
+.l2 .level-header::before { background: radial-gradient(ellipse at left, var(--neon-g), transparent 70%); }
+.l3 .level-header::before { background: radial-gradient(ellipse at left, var(--neon-b), transparent 70%); }
+.l4 .level-header::before { background: radial-gradient(ellipse at left, var(--neon-o), transparent 70%); }
+.l5 .level-header::before { background: radial-gradient(ellipse at left, var(--neon-v), transparent 70%); }
+
+.level-num {
+  font-family: var(--font-m);
+  font-size: .75rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.level-num::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.l1 .level-num { color: var(--neon-p); }
+.l2 .level-num { color: var(--neon-g); }
+.l3 .level-num { color: var(--neon-b); }
+.l4 .level-num { color: var(--neon-o); }
+.l5 .level-num { color: var(--neon-v); }
+
+.level-title {
+  font-family: var(--font-h);
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: 900;
+  line-height: 1.2;
+}
+.l1 .level-title { color: var(--neon-p); text-shadow: 0 0 30px rgba(255,45,120,.4); }
+.l2 .level-title { color: var(--neon-g); text-shadow: 0 0 30px rgba(0,255,159,.4); }
+.l3 .level-title { color: var(--neon-b); text-shadow: 0 0 30px rgba(0,212,255,.4); }
+.l4 .level-title { color: var(--neon-o); text-shadow: 0 0 30px rgba(255,149,0,.4); }
+.l5 .level-title { color: var(--neon-v); text-shadow: 0 0 30px rgba(168,85,247,.4); }
+
+.level-subtitle { font-size: 1rem; color: var(--muted); margin-top: 6px; }
+
+/* ── SECTION ── */
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 48px;
+}
+
+/* ── SECTION TITLE ── */
+.section-title {
+  font-family: var(--font-h);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.section-title .sos { font-size: .85rem; }
+.l1 .section-title { color: var(--neon-p); }
+.l2 .section-title { color: var(--neon-g); }
+.l3 .section-title { color: var(--neon-b); }
+.l4 .section-title { color: var(--neon-o); }
+.l5 .section-title { color: var(--neon-v); }
+
+/* ── CARDS ── */
+.card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 28px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(8px);
+}
+.card-title {
+  font-family: var(--font-h);
+  font-size: .8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  color: var(--neon-b);
+}
+.l1 .card-title { color: rgba(255,45,120,.8); }
+.l2 .card-title { color: rgba(0,255,159,.8); }
+.l3 .card-title { color: rgba(0,212,255,.8); }
+.l4 .card-title { color: rgba(255,149,0,.8); }
+.l5 .card-title { color: rgba(168,85,247,.8); }
+
+/* ── GRID ── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* ── BULLETS ── */
+ul.loot { list-style: none; }
+ul.loot li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+ul.loot li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--muted);
+}
+.l1 ul.loot li::before { color: var(--neon-p); }
+.l2 ul.loot li::before { color: var(--neon-g); }
+.l3 ul.loot li::before { color: var(--neon-b); }
+.l4 ul.loot li::before { color: var(--neon-o); }
+.l5 ul.loot li::before { color: var(--neon-v); }
+
+/* ── QUOTE BOXES ── */
+.quote-box {
+  background: var(--bg3);
+  border-left: 3px solid;
+  border-radius: 0 12px 12px 0;
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-family: var(--font-m);
+  font-size: .88rem;
+  line-height: 1.6;
+}
+.l1 .quote-box { border-color: var(--neon-p); }
+.l2 .quote-box { border-color: var(--neon-g); }
+.l3 .quote-box { border-color: var(--neon-b); }
+.l4 .quote-box { border-color: var(--neon-o); }
+.l5 .quote-box { border-color: var(--neon-v); }
+
+.quote-label {
+  font-family: var(--font-b);
+  font-size: .75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+/* ── RPG VOCAB TABLE ── */
+.rpg-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: .9rem;
+}
+.rpg-table thead tr {
+  background: var(--bg3);
+}
+.rpg-table thead th {
+  padding: 10px 14px;
+  text-align: left;
+  font-family: var(--font-h);
+  font-size: .65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-bottom: 2px solid;
+}
+.l1 .rpg-table thead th { color: var(--neon-p); border-color: var(--neon-p); }
+.l2 .rpg-table thead th { color: var(--neon-g); border-color: var(--neon-g); }
+.l3 .rpg-table thead th { color: var(--neon-b); border-color: var(--neon-b); }
+.l4 .rpg-table thead th { color: var(--neon-o); border-color: var(--neon-o); }
+.l5 .rpg-table thead th { color: var(--neon-v); border-color: var(--neon-v); }
+
+.rpg-table tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+.rpg-table tbody tr:hover { background: var(--glass2); }
+.rpg-table tbody td { padding: 9px 14px; }
+.rpg-table tbody td:first-child {
+  font-family: var(--font-m);
+  font-size: .82rem;
+  color: #c9d1f5;
+}
+.rpg-table tbody td:last-child { color: var(--muted); font-size: .88rem; }
+
+/* ── HACK ACCORDION ── */
+.hack-wrap { margin: 20px 0; }
+.hack-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--bg3);
+  border: 1px dashed;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: var(--font-h);
+  font-size: .72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: left;
+  transition: all .25s;
+  color: var(--neon-y);
+  border-color: rgba(255,215,0,.35);
+}
+.hack-btn:hover {
+  background: rgba(255,215,0,.07);
+  box-shadow: 0 0 18px rgba(255,215,0,.2);
+  transform: translateX(4px);
+}
+.hack-btn .icon { font-size: 1.1rem; animation: pulse-icon 2s ease-in-out infinite; }
+@keyframes pulse-icon { 0%,100%{transform:scale(1);} 50%{transform:scale(1.2);} }
+.hack-btn .chevron { margin-left: auto; transition: transform .3s; }
+.hack-btn.open .chevron { transform: rotate(180deg); }
+.hack-body {
+  display: none;
+  background: linear-gradient(135deg, rgba(255,215,0,.04), rgba(255,165,0,.02));
+  border: 1px dashed rgba(255,215,0,.2);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  padding: 20px 24px;
+  font-size: .95rem;
+  line-height: 1.75;
+}
+.hack-body.visible { display: block; animation: slideDown .3s ease; }
+@keyframes slideDown { from{opacity:0;transform:translateY(-8px);} to{opacity:1;transform:translateY(0);} }
+.hack-body strong { color: var(--neon-y); }
+.hack-body .mnemonic {
+  font-family: var(--font-m);
+  font-size: 1rem;
+  color: var(--neon-y);
+  background: rgba(255,215,0,.08);
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin: 12px 0;
+  letter-spacing: 1px;
+}
+
+/* ── SOS BADGE ── */
+.sos-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .75rem;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-family: var(--font-m);
+  letter-spacing: 1px;
+}
+.sos-1 { background: rgba(94,234,212,.1); color: #5eead4; border: 1px solid rgba(94,234,212,.3); }
+.sos-2 { background: rgba(251,191,36,.1); color: #fbbf24; border: 1px solid rgba(251,191,36,.3); }
+.sos-3 { background: rgba(248,113,113,.1); color: #f87171; border: 1px solid rgba(248,113,113,.3); animation: pulse-sos 2s ease-in-out infinite; }
+@keyframes pulse-sos { 0%,100%{box-shadow:0 0 0 0 rgba(248,113,113,.4);} 50%{box-shadow:0 0 0 5px rgba(248,113,113,0);} }
+
+/* ── ALERT / SOS NOTE ── */
+.sos-note {
+  background: rgba(248,113,113,.07);
+  border: 1px solid rgba(248,113,113,.3);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: .9rem;
+  color: #fca5a5;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.sos-note .icon { flex-shrink: 0; }
+
+/* ── INFO HIGHLIGHT ── */
+.info-highlight {
+  background: rgba(0,212,255,.06);
+  border: 1px solid rgba(0,212,255,.2);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: .9rem;
+}
+
+/* ── CHAPTER HEADER ── */
+.chapter-hdr {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px 16px 0 0;
+  padding: 18px 24px 14px;
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.chapter-hdr .ch-num {
+  font-family: var(--font-h);
+  font-size: .7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.chapter-hdr h3 {
+  font-family: var(--font-h);
+  font-size: 1rem;
+  font-weight: 700;
+}
+.l1 .chapter-hdr h3 { color: var(--neon-p); }
+.l2 .chapter-hdr h3 { color: var(--neon-g); }
+.l3 .chapter-hdr h3 { color: var(--neon-b); }
+.l4 .chapter-hdr h3 { color: var(--neon-o); }
+
+.chapter-body {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  padding: 22px 24px;
+  margin-bottom: 8px;
+}
+
+/* ── LEVEL DIVIDER ── */
+.level-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 48px 0 0;
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── REVISION SECTION ── */
+.revision-section {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 60px 24px;
+}
+.revision-section h2 {
+  font-family: var(--font-h);
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-align: center;
+  color: var(--neon-y);
+  text-shadow: 0 0 30px rgba(255,215,0,.5);
+  margin-bottom: 36px;
+}
+.revision-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+.rev-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px 24px;
+}
+.rev-card h4 {
+  font-family: var(--font-h);
+  font-size: .75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rev-card.rc-p h4 { color: var(--neon-p); }
+.rev-card.rc-g h4 { color: var(--neon-g); }
+.rev-card.rc-v h4 { color: var(--neon-v); }
+.rev-card ol { padding-left: 18px; }
+.rev-card ol li { margin-bottom: 7px; font-size: .9rem; color: var(--text); }
+
+/* ── UNLOCK SECTION ── */
+.unlock-section-wrap {
+  max-width: 720px;
+  margin: 64px auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+.unlock-card {
+  background: linear-gradient(135deg, rgba(168,85,247,.1), rgba(0,212,255,.06), rgba(255,45,120,.07));
+  border: 1px solid rgba(168,85,247,.35);
+  border-radius: 24px;
+  padding: 52px 44px;
+  text-align: center;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 60px rgba(168,85,247,.15), 0 0 120px rgba(0,212,255,.07), inset 0 1px 0 rgba(255,255,255,.05);
+  position: relative;
+  overflow: hidden;
+}
+.unlock-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(168,85,247,.12), transparent);
+  pointer-events: none;
+}
+.unlock-badge {
+  display: inline-block;
+  font-family: var(--font-m);
+  font-size: .72rem;
+  letter-spacing: 3px;
+  color: var(--neon-y);
+  border: 1px solid rgba(255,215,0,.4);
+  padding: 5px 18px;
+  border-radius: 99px;
+  margin-bottom: 24px;
+  animation: pulse-sos 2s ease-in-out infinite;
+  text-transform: uppercase;
+}
+.unlock-title {
+  font-family: var(--font-h);
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--neon-v) 0%, var(--neon-b) 50%, var(--neon-p) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 18px;
+  line-height: 1.2;
+  letter-spacing: 1px;
+}
+.unlock-desc {
+  color: var(--muted);
+  font-size: .97rem;
+  line-height: 1.75;
+  max-width: 480px;
+  margin: 0 auto 36px;
+}
+.unlock-actions { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.unlock-buy-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--neon-v), var(--neon-p));
+  color: #fff;
+  font-family: var(--font-h);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+  padding: 15px 40px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  box-shadow: 0 0 28px rgba(168,85,247,.45), 0 0 60px rgba(168,85,247,.15);
+  transition: transform .2s, box-shadow .2s;
+  cursor: pointer;
+}
+.unlock-buy-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 44px rgba(168,85,247,.65), 0 0 80px rgba(168,85,247,.25);
+}
+.unlock-after-payment {
+  font-size: .72rem;
+  color: rgba(200,180,255,.65);
+  font-style: italic;
+  letter-spacing: .4px;
+  margin: 6px 0 0;
+  line-height: 1.5;
+}
+.unlock-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 360px;
+  color: var(--muted);
+  font-size: .72rem;
+  letter-spacing: 2px;
+  font-family: var(--font-m);
+}
+.unlock-divider::before, .unlock-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.unlock-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.unlock-input {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(168,85,247,.4);
+  border-radius: 8px;
+  padding: 12px 20px;
+  color: var(--text);
+  font-family: var(--font-m);
+  font-size: 1rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  outline: none;
+  min-width: 200px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.unlock-input:focus {
+  border-color: var(--neon-v);
+  box-shadow: 0 0 18px rgba(168,85,247,.3);
+}
+.unlock-input::placeholder { color: rgba(148,163,184,.45); letter-spacing: 1px; text-transform: none; }
+.unlock-submit-btn {
+  background: rgba(168,85,247,.15);
+  border: 1px solid rgba(168,85,247,.5);
+  border-radius: 8px;
+  color: var(--neon-v);
+  font-family: var(--font-h);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 12px 24px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.unlock-submit-btn:hover {
+  background: rgba(168,85,247,.28);
+  box-shadow: 0 0 22px rgba(168,85,247,.35);
+  transform: translateY(-1px);
+}
+
+/* ── TOAST ── */
+#toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(140px);
+  background: rgba(0,255,159,.1);
+  border: 1px solid rgba(0,255,159,.4);
+  border-radius: 12px;
+  padding: 16px 36px;
+  font-family: var(--font-h);
+  font-size: .8rem;
+  letter-spacing: 2px;
+  color: var(--neon-g);
+  backdrop-filter: blur(16px);
+  z-index: 9999;
+  transition: transform .45s cubic-bezier(.34,1.56,.64,1);
+  white-space: nowrap;
+  box-shadow: 0 0 32px rgba(0,255,159,.2);
+  pointer-events: none;
+}
+#toast.error {
+  background: rgba(255,45,120,.1);
+  border-color: rgba(255,45,120,.4);
+  color: var(--neon-p);
+  box-shadow: 0 0 32px rgba(255,45,120,.2);
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 40px 24px;
+  font-family: var(--font-m);
+  font-size: .75rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     PROGRESS BAR
+════════════════════════════════════════════ -->
+<div id="progress-wrap">
+  <span style="font-family:var(--font-h);font-size:.65rem;color:var(--neon-v);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;">STUDY DUNGEON</span>
+  <div id="progress-bar-outer"><div id="progress-bar-inner"></div></div>
+  <span id="progress-xp">0 XP</span>
+  <span id="progress-label">LVL 0 / 5</span>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HERO
+════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-badge">⚔ Α΄ ΛΥΚΕΙΟΥ — ΕΞΕΤΑΣΕΙΣ 2025</div>
+  <h1>ΑΡΧΑΙΟΙ ΕΛΛΗΝΕΣ<br>ΙΣΤΟΡΙΟΓΡΑΦΟΙ</h1>
+  <p class="subtitle">Θουκυδίδης &amp; Ξενοφών · Πλήρης Οδηγός Μελέτης · Gamified Edition<br>
+  <em style="font-size:.9rem;color:rgba(148,163,184,.7);">Εξεταστέα Ύλη: Εισαγωγή σσ. 18-33 · Ελληνικά Βιβλίο 2 · Ιστορίαι Βιβλίο 3</em></p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="val" style="color:var(--neon-p)">5</div><div class="lbl">LEVELS</div></div>
+    <div class="hero-stat"><div class="val" style="color:var(--neon-b)">15+</div><div class="lbl">ΚΕΦΑΛΑΙΑ</div></div>
+    <div class="hero-stat"><div class="val" style="color:var(--neon-g)">150+</div><div class="lbl">ΛΕΞΙΛΟΓΙΟ</div></div>
+    <div class="hero-stat"><div class="val" style="color:var(--neon-y)">10</div><div class="lbl">STUDY HACKS</div></div>
+  </div>
+  <a href="#level-nav" class="start-btn">⚔ ΕΝΑΡΞΗ ΑΠΟΣΤΟΛΗΣ</a>
+</section>
+
+<!-- ══════════════════════════════════════════
+     LEVEL NAV
+════════════════════════════════════════════ -->
+<nav id="level-nav">
+  <a href="#l1" class="nav-pill nav-l1">LVL 1 · Θουκυδίδης Εισ.</a>
+  <a href="#l2" class="nav-pill nav-l2">LVL 2 · Ξενοφών Εισ.</a>
+  <a href="#l3" class="nav-pill nav-l3">LVL 3 · Ελληνικά Βιβλίο 2</a>
+  <a href="#l4" class="nav-pill nav-l4">LVL 4 · Ιστορίαι Βιβλίο 3</a>
+  <a href="#l5" class="nav-pill nav-l5">LVL 5 · Γραμματική</a>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════════
+     LEVEL 1 — ΘΟΥΚΥΔΙΔΗΣ ΕΙΣΑΓΩΓΗ (σσ. 18-28)
+════════════════════════════════════════════ -->
+<article class="l1" id="l1">
+  <div class="level-header">
+    <div class="level-num">LEVEL 01 · UNLOCK</div>
+    <h2 class="level-title">ΘΟΥΚΥΔΙΔΗΣ — ΕΙΣΑΓΩΓΗ</h2>
+    <p class="level-subtitle">Βιογραφία · Έργο · Μέθοδος · Γλώσσα &amp; Ύφος &nbsp;|&nbsp; σσ. 18-28</p>
+  </div>
+
+  <!-- ─── 1. ΒΙΟΓΡΑΦΙΚΑ ─── -->
+  <section class="section">
+    <div class="section-title">1. ΒΙΟΓΡΑΦΙΚΑ ΣΤΟΙΧΕΙΑ <span class="sos sos-badge sos-3">★★★ ΕΞΕΤΑΣΙΜΟ</span></div>
+
+    <div class="reveal grid-2">
+      <div class="card">
+        <div class="card-title">Καταγωγή &amp; Οικογένεια</div>
+        <ul class="loot">
+          <li>Γεννήθηκε πιθ. <strong>455–399 π.Χ.</strong> στον δήμο <strong>Αλιμούντος</strong> (σημερινός Άλιμος Αττικής)</li>
+          <li>Πλούσια, <strong>αριστοκρατική</strong> οικογένεια με δεσμούς με τον βασιλιά <strong>Όλορο</strong> της Θράκης και τους <strong>Μιλτιάδη &amp; Κίμωνα</strong></li>
+          <li>Η οικογένεια κατείχε <strong>χρυσωρυχείο</strong> στη Σκαπτή Ύλη Θράκης και ασκούσε επιρροή στους κατοίκους</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Μόρφωση &amp; Επιδράσεις</div>
+        <ul class="loot">
+          <li>Δάσκαλοι: φιλόσοφος <strong>Αναξαγόρας</strong> (στενός φίλος Περικλή) + ρήτορας <strong>Αντιφώντας</strong></li>
+          <li>Εξοικειώθηκε με σοφιστές <strong>Γοργία</strong> (Λεοντίνοι Σικελίας) και <strong>Πρόδικο</strong> (Ηλεία)</li>
+          <li>Επίδραση από <strong>ιπποκρατική ιατρική</strong> — φαίνεται στη μεθοδολογία του</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Στρατηγική &amp; Εξορία — Το Κλειδί</div>
+      <ul class="loot">
+        <li>Πίστευε στη στρατηγική του Περικλή: <strong>άμυνα στη ξηρά, επίθεση στη θάλασσα, σύνεση</strong></li>
+        <li>Το <strong>2ο έτος</strong> πολέμου προσβλήθηκε κι ο ίδιος από τον <strong>λοιμό</strong> αλλά επέζησε</li>
+        <li><strong>424 π.Χ.:</strong> ως στρατηγός δεν μπόρεσε να σώσει την <strong>Αμφίπολη</strong> από τον Βρασίδα → <strong>εξορία 20 ετών</strong></li>
+        <li>Η εξορία του επέτρεψε να συλλέγει πληροφορίες <strong>και από τα δύο στρατόπεδα</strong></li>
+        <li>Δεν είναι βέβαιο αν επέστρεψε με την αμνηστία του <strong>404 π.Χ.</strong></li>
+        <li>Το έργο έμεινε <strong>ημιτελές</strong> — διακόπτεται στο <strong>411 π.Χ.</strong></li>
+      </ul>
+      <div class="quote-box">
+        <div class="quote-label">5.26.5 — Ο ίδιος για την εξορία του</div>
+        «Καὶ ξυνέβη μοι φεύγειν τὴν ἐμαυτοῦ ἔτη εἴκοσι μετὰ τὴν ἐς Ἀμφίπολιν στρατηγίαν»
+      </div>
+    </div>
+
+    <!-- HACK 1 -->
+    <div class="reveal hack-wrap">
+      <button class="hack-btn" onclick="toggleHack(this)">
+        <span class="icon">🎯</span>
+        REVEAL HACK #1 — Θουκυδίδης Βιο: Μνημοτεχνική «ΑΛΟΕΚ»
+        <span class="chevron">▼</span>
+      </button>
+      <div class="hack-body">
+        <strong>Θυμήσου τα 5 ΣΟΣ βιογραφικά με τη λέξη ΑΛΟΕΚ:</strong>
+        <div class="mnemonic">Α — Αμφίπολη (424 π.Χ. → εξορία)<br>Λ — Λοιμός (2ο έτος — επέζησε)<br>Ο — Ολορος (ο παππούς / Θράκη / χρυσωρυχείο)<br>Ε — Εξορία 20 ετών → έγραφε και από τις δύο πλευρές<br>Κ — Κτῆμα ἐς αἰεί (το έργο του = "απόκτημα για πάντα")</div>
+        <strong>Εξεταστικό κόλπο:</strong> Αν σε ρωτήσουν για τη σημασία της εξορίας, γράψε: «Επέτρεψε συλλογή πληροφοριών και από τα δύο αντίπαλα στρατόπεδα — πλεονέκτημα αντικειμενικότητας.»
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 2. ΕΡΓΟ & ΙΔΕΕΣ ─── -->
+  <section class="section">
+    <div class="section-title">2. ΤΟ ΕΡΓΟ — ΕΝΔΙΑΦΕΡΟΝΤΑ &amp; ΙΔΕΕΣ <span class="sos sos-badge sos-3">★★★ ΕΞΕΤΑΣΙΜΟ</span></div>
+
+    <div class="reveal card">
+      <div class="card-title">Σημασία του Πολέμου</div>
+      <ul class="loot">
+        <li>Κατενόησε από την αρχή τη <strong>μεγάλη σημασία</strong> του Πελοποννησιακού πολέμου</li>
+        <li>Βαθύτερη αιτία: η ανάπτυξη αθηναϊκής δύναμης, η μετατροπή της «συμμαχίας» σε <strong>ηγεμονία (ἀρχή)</strong></li>
+        <li>Αποφεύγει συνειδητά: <strong>μύθους, χρησμούς, ανέκδοτα, ατομικές προσωπογραφίες, φήμες</strong></li>
+      </ul>
+    </div>
+
+    <div class="reveal grid-2">
+      <div class="card">
+        <div class="card-title">Φύση Ανθρώπου &amp; Πόλεμος</div>
+        <div class="quote-box">
+          <div class="quote-label">3.82.2 — Κεντρικό γνωμικό</div>
+          «ἕως ἂν ἡ αὐτὴ φύσις ἀνθρώπων ᾖ» — η φύση των ανθρώπων δεν αλλάζει
+        </div>
+        <div class="quote-box">
+          <div class="quote-label">3.82.2 — Για τον πόλεμο</div>
+          «ὁ πόλεμος... βίαιος διδάσκαλος καὶ πρὸς τὰ παρόντα τὰς ὀργὰς τῶν πολλῶν ὁμοιοῖ»
+        </div>
+        <ul class="loot">
+          <li>Στον εμφύλιο οι λέξεις χάνουν το νόημά τους (3.82.3)</li>
+          <li>Οι αντίπαλοι δίνουν όρκους χωρίς να σκοπεύουν να τους τηρήσουν (3.83.2)</li>
+          <li>Κινητήρια δυνάμεις: <strong>πλεονεξία</strong> + <strong>φιλοτιμία</strong></li>
+          <li>ΔΕΝ είναι απλός απαισιόδοξος — η λογική = η μόνη σταθερή αξία</li>
+          <li>Οι θεοί <strong>ΔΕΝ</strong> επεμβαίνουν — η τύχη = απρόβλεπτες συγκυρίες</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Πρότυπο Ηγέτη &amp; Πολίτη</div>
+        <ul class="loot">
+          <li>Ιδανικός ηγέτης = <strong>Περικλής (2.65)</strong>: πολιτική οξυδέρκεια, ανεξαρτησία από χρήμα, τόλμη να λέει αλήθεια</li>
+          <li>Υπεύθυνος πολίτης: χρησιμοποιεί λογική, ενδιαφέρεται ΚΑΙ για προσωπικά ΚΑΙ για κοινό</li>
+          <li>Ακόμα και στον λοιμό κάποιοι έδειξαν ανθρωπιά και φιλότιμο</li>
+        </ul>
+        <div class="quote-box">
+          <div class="quote-label">Γνωμικά Περικλή</div>
+          «οἱ καιροὶ οὐ μενετοί» (1.142.1) &nbsp;|&nbsp; «μέγα τὸ τῆς θαλάσσης κράτος» (1.143.5)
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Η Τάση Γενίκευσης</div>
+      <ul class="loot">
+        <li>Ανάγεται από το <strong>συγκεκριμένο γεγονός</strong> στο <strong>γενικό και πανανθρώπινο</strong> (όπως οι μεγάλοι τραγικοί)</li>
+        <li>Τα «γνωμικά» του δεν είναι διδακτισμός — είναι <strong>απόσταγμα έρευνας</strong></li>
+        <li>Επίδραση: ιατρική Ιπποκράτη + σοφιστές + αρχαία τραγωδία</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─── 3. ΜΕΘΟΔΟΣ ─── -->
+  <section class="section">
+    <div class="section-title">3. ΜΕΘΟΔΟΣ <span class="sos sos-badge sos-3">★★★ ΕΞΕΤΑΣΙΜΟ</span></div>
+
+    <div class="reveal card">
+      <ul class="loot">
+        <li><strong>Αυτοψία</strong> — επίσκεψη πεδίων μαχών, μελέτη επίσημων κειμένων &amp; κρατικών αρχείων</li>
+        <li>Για παλαιά γεγονότα: <strong>«εἰκότα»</strong> (εύλογα) + <strong>«σημεῖα»/«μαρτύρια»</strong> (ενδείξεις) + <strong>«τεκμήρια»</strong> (συμπεράσματα)</li>
+        <li>Αυτοψία: «<em>οἷς τε αὐτὸς παρῆν</em>» (1.22.2) + «<em>καὶ γενομένῳ παρ᾽ ἀμφοτέροις τοῖς πράγμασι</em>» (5.26.5)</li>
+      </ul>
+      <div class="quote-box">
+        <div class="quote-label">1.22.2 — Για τις πληροφορίες</div>
+        «οὐκ ἐκ τοῦ παρατυχόντος πυνθανόμενος ἠξίωσα γράφειν» — δεν κράτησε πληροφορίες από τον πρώτο τυχόντα
+      </div>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Δημηγορίες <span class="sos-badge sos-2" style="font-size:.7rem;">★★ ΣΥΧΝΟ</span></div>
+      <ul class="loot">
+        <li>Μεγάλη δυσκολία παράθεσης αυτολεξεί — ισχύει ακόμα και για λόγους που ο ίδιος άκουσε</li>
+        <li>Σκοπός: αποδίδουν <strong>κίνητρα, σχεδιασμούς, στόχους, προσωπικότητα, ήθος</strong> ομιλητών</li>
+        <li>Κράτησε την κεντρική ιδέα — έγραψε «<strong>ὅτι ἐγγύτατα τῆς ξυμπάσης γνώμης τῶν ἀληθῶς λεχθέντων</strong>»</li>
+        <li>Λειτουργούν με σχήμα <strong>θέσης-αντίθεσης</strong> — αντιστοιχία με μεγάλα γεγονότα</li>
+      </ul>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Χρονολογική Ακρίβεια</div>
+      <ul class="loot">
+        <li>Χρόνος: <strong>θέρος</strong> (8 μήνες επιχειρήσεων) + <strong>χειμώνας</strong> (4 μήνες)</li>
+        <li>«γέγραπται δὲ ἑξῆς ὡς ἕκαστα ἐγίγνετο κατὰ θέρος καὶ χειμῶνα» (2.1)</li>
+        <li>Πρωτοτυπία: ακολουθεί χρονολογική σειρά (ΟΧΙ θεματικές ενότητες)</li>
+      </ul>
+    </div>
+
+    <!-- HACK 2 -->
+    <div class="reveal hack-wrap">
+      <button class="hack-btn" onclick="toggleHack(this)">
+        <span class="icon">🔮</span>
+        REVEAL HACK #2 — Μέθοδος Θουκυδίδη: «3Α + 3Σ»
+        <span class="chevron">▼</span>
+      </button>
+      <div class="hack-body">
+        <strong>Για να θυμάσαι τη μέθοδο στις εξετάσεις — «3Α + 3Σ»:</strong>
+        <div class="mnemonic">3Α: Αυτοψία · Αμφοτέρωθεν (και 2 πλευρές) · Αρχεία<br>3Σ: Σημεία · Συμπεράσματα (τεκμήρια) · Σύνεση (εἰκότα)</div>
+        <strong>Για τις δημηγορίες γράψε:</strong> «Ο ιστορικός δεν παρέθετε κατά λέξη τους λόγους· διατηρούσε την κεντρική ιδέα (' ξυμπάσης γνώμης') για να αναδείξει ήθος και κίνητρα.»<br><br>
+        <strong>Ωραίο «εξτρά» για πλήρη βαθμό:</strong> σύγκρινε τη μέθοδό του με σύγχρονη δημοσιογραφία — η αυτοψία του θυμίζει «ρεπόρτερ πεδίου».
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 4. ΔΟΜΗ ΕΡΓΟΥ ─── -->
+  <section class="section">
+    <div class="section-title">4. ΔΟΜΗ ΤΟΥ ΕΡΓΟΥ <span class="sos-badge sos-1" style="font-size:.7rem;">★ ΣΥΜΠΛΗΡΩΜΑΤΙΚΟ</span></div>
+    <div class="reveal card">
+      <ul class="loot">
+        <li><strong>8 βιβλία</strong> (μεταγενέστερη διαίρεση)</li>
+        <li>Βιβλίο 1: αίτια, μέθοδος, Αρχαιολογία (προϊστορία), πεντηκονταετία</li>
+        <li>Βιβλία 2–4: πρώτη δεκαετία πολέμου (431–421 π.Χ.)</li>
+        <li>Βιβλίο 5: μέχρι 415 π.Χ. — «Διάλογος Μηλίων» (δίκαιο ισχυρότερου)</li>
+        <li>Βιβλία 6–7: Σικελική εκστρατεία (415–413 π.Χ.)</li>
+        <li>Βιβλίο 8: τρίτη περίοδος — Δεκελεικός πόλεμος, Πέρσες, ολιγαρχία 411 π.Χ.</li>
+        <li>Η αφήγηση <strong>ΔΙΑΚΟΠΤΕΤΑΙ</strong> στο 411 π.Χ. — ημιτελές λόγω θανάτου (8ο βιβλίο χωρίς δημηγορίες)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─── 5. ΓΛΩΣΣΑ & ΥΦΟΣ ─── -->
+  <section class="section">
+    <div class="section-title">5. ΓΛΩΣΣΑ &amp; ΥΦΟΣ <span class="sos-badge sos-2" style="font-size:.7rem;">★★ ΣΥΧΝΟ</span></div>
+    <div class="reveal card">
+      <p style="margin-bottom:14px;">Γλώσσα: «αρχαία αττική» 5ου αι. — αρχαϊκότεροι τύποι.</p>
+      <div class="quote-box">
+        <div class="quote-label">Χαρακτηρισμός Κακριδή</div>
+        «η γλώσσα μας δεν μπορεί να εκφράσει ισάξια έναν λόγο τόσο στρυφνό και ποιητικό μαζί, όπως του Θουκυδίδη»
+      </div>
+      <p style="color:var(--neon-p);font-style:italic;font-family:var(--font-m);font-size:.9rem;">«κτῆμα ἐς αἰεί» — ένα απόκτημα για πάντα</p>
+    </div>
+    <div class="reveal card">
+      <div class="card-title">Χαρακτηριστικές Γλωσσικές Ιδιομορφίες</div>
+      <ul class="loot">
+        <li>Χρήση <strong>ἐς</strong> αντί εἰς + <strong>ξὺν</strong> αντί σύν (ἐσπλέοντι, ξυνέγραψε)</li>
+        <li>Αρχαϊκότερο σύμπλεγμα <strong>σσ</strong> αντί ττ (ἡσσῶντο αντί ἡττῶντο)</li>
+        <li>Αρχαϊκοί τύποι: <strong>αἰεί</strong> (αντί ἀεί), <strong>ἐξαπιναίως</strong> (αντί ἐξαπίνης, βλ. 3.70.6)</li>
+        <li>Ουδέτερο πληθ. ως επίρρημα: «ὁμοῖα» = ὁμοίως, «ἐναντία» = ἐναντίον</li>
+        <li>Ουδέτερο επιθέτου ως αφηρημένο ουσ.: τὸ εὔδαιμον = ἡ εὐδαιμονία</li>
+        <li>Σύνθετα ρήματα με 2–3 προθέσεις (βραχυλογική σύνταξη): ξυμπροπέμψαι, ἀνταναγόμενοι</li>
+        <li>Επισώρευση αιτιολογικών προτάσεων &amp; προσδιορισμών</li>
+        <li>Πάρισα &amp; Ομοιοτέλευτα: «τὸν μὲν... λαμπρότατον καὶ τοῖς διαφθαρεῖσι δυστυχέστατον» (7.87.5)</li>
+        <li>Συνεχής χρήση <strong>αντιθέσεων</strong> — αφθονία ετερόπτωτων προσδιορισμών — μακρές περίοδοι</li>
+      </ul>
+    </div>
+  </section>
+</article>
+
+<div class="level-divider"></div>
+
+<!-- ══════════════════════════════════════════
+     PAYWALL — ΞΕΚΛΕΙΔΩΜΑ ΠΡΟΣΒΑΣΗΣ
+════════════════════════════════════════════ -->
+<section id="unlock-section">
+  <div class="unlock-section-wrap">
+    <div class="unlock-card">
+      <div class="unlock-badge">🔒 PREMIUM ACCESS</div>
+      <h2 class="unlock-title">ΞΕΚΛΕΙΔΩΜΑ ΠΛΗΡΟΥΣ ΠΡΟΣΒΑΣΗΣ</h2>
+      <p class="unlock-desc">Απόκτησε πρόσβαση σε όλα τα επίπεδα, τα Revision Cards και τα Study Hacks. Αγόρασε τον κωδικό πρόσβασης με 5€ και ξεκλείδωσε το Dungeon!</p>
+      <div class="unlock-actions">
+        <a href="https://www.paypal.com/ncp/payment/KM8MEFU72X9PS" class="unlock-buy-btn" target="_blank" rel="noopener noreferrer">ΑΓΟΡΑ ΚΩΔΙΚΟΥ (5€)</a>
+        <p class="unlock-after-payment">Μετά την πληρωμή, ο κωδικός θα σταλεί στο email σας εντός λίγων ωρών.</p>
+        <div class="unlock-divider">— ΉΔΗ ΕΧΕΙΣ ΚΩΔΙΚΟ; —</div>
+        <div class="unlock-input-group">
+          <input type="text" id="unlock-code-input" class="unlock-input" placeholder="Εισαγωγή Κωδικού" maxlength="8" autocomplete="off" spellcheck="false">
+          <button class="unlock-submit-btn" onclick="handleUnlock()">ΞΕΚΛΕΙΔΩΜΑ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     LOCKED CONTENT — Levels 2-5 + Revision
+════════════════════════════════════════════ -->
+<div id="locked-content" style="display:none;">
+
+<!-- ══════════════════════════════════════════
+     LEVEL 2 — ΞΕΝΟΦΩΝ ΕΙΣΑΓΩΓΗ (σσ. 29-33)
+════════════════════════════════════════════ -->
+<article class="l2" id="l2">
+  <div class="level-header">
+    <div class="level-num">LEVEL 02 · UNLOCK</div>
+    <h2 class="level-title">ΞΕΝΟΦΩΝ — ΕΙΣΑΓΩΓΗ</h2>
+    <p class="level-subtitle">Βιογραφία · Έργο · Ιδέες &nbsp;|&nbsp; σσ. 29-33</p>
+  </div>
+
+  <!-- ─── 1. ΒΙΟΓΡΑΦΙΚΑ ─── -->
+  <section class="section">
+    <div class="section-title">1. ΒΙΟΓΡΑΦΙΚΑ ΣΤΟΙΧΕΙΑ <span class="sos sos-badge sos-3">★★★ ΕΞΕΤΑΣΙΜΟ</span></div>
+
+    <div class="reveal card">
+      <div class="card-title">Καταγωγή &amp; Νεότητα</div>
+      <ul class="loot">
+        <li>Γεννήθηκε μεταξύ <strong>431–429 π.Χ.</strong> στον δήμο <strong>Ερχιάς</strong> Αττικής</li>
+        <li>Πατέρας: <strong>Γρύλλος</strong>, εύπορος κτηματίας. Υπηρέτησε στο σώμα των <strong>ιππέων</strong></li>
+        <li>Γνωρίστηκε με τον <strong>Σωκράτη</strong> &amp; έζησε τα ταραγμένα χρόνια του Πελοποννησιακού πολέμου</li>
+      </ul>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Εκστρατεία Κύρου (401 π.Χ.) — Η Καταλυτική Εμπειρία</div>
+      <ul class="loot">
+        <li>Ο φίλος του <strong>Πρόξενος</strong> τον προσκάλεσε στην εκστρατεία του <strong>Κύρου Β΄</strong> κατά του Αρταξέρξη</li>
+        <li>Μετά τα <strong>Κούναξα</strong> (θάνατος Κύρου) ανέλαβε ηγετικές πρωτοβουλίες για την επιστροφή των «<strong>Μυρίων</strong>»</li>
+        <li>Ο βασιλιάς <strong>Αγησίλαος</strong> ανέλαβε ηγεσία (396 π.Χ.) — ο Ξενοφών τον ακολούθησε στη μάχη <strong>Κορωνείας</strong> (394 π.Χ.)</li>
+      </ul>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Εξορία &amp; Επιστροφή</div>
+      <ul class="loot">
+        <li>Εξορία από Αθήνα (λόγω συνεργασίας με Σπαρτιάτες — δικαιολογημένη κι αναπόφευκτη)</li>
+        <li>Σπαρτιάτες του παραχώρησαν κτήμα στον <strong>Σκιλλούντα</strong> (κοντά Ολυμπία) — ~20 χρόνια ήρεμης ζωής</li>
+        <li>Μετά τα <strong>Λεύκτρα</strong> (371 π.Χ.) μετακόμισε στην <strong>Κόρινθο</strong>. Επιστροφή στην Αθήνα ~365 π.Χ.</li>
+        <li>Ο γιος του <strong>Γρύλλος</strong> σκοτώθηκε στη μάχη <strong>Μαντινείας</strong> (362 π.Χ.) — πατρικό του όνομα ήδη πολύ γνωστό</li>
+        <li>Πέθανε μετά το <strong>355 π.Χ.</strong></li>
+      </ul>
+    </div>
+
+    <!-- HACK 3 -->
+    <div class="reveal hack-wrap">
+      <button class="hack-btn" onclick="toggleHack(this)">
+        <span class="icon">⚡</span>
+        REVEAL HACK #3 — Ξενοφών Βιο: Ακρωνύμιο «ΣΑΚΣΕ»
+        <span class="chevron">▼</span>
+      </button>
+      <div class="hack-body">
+        <strong>Τα 5 ΣΟΣ βιογραφικά του Ξενοφώντα — θυμήσου «ΣΑΚΣΕ»:</strong>
+        <div class="mnemonic">Σ — Σωκράτης (πνευματικό πρότυπο)<br>Α — Αναβ. Κύρου (401 π.Χ. / Κούναξα / «Μύριοι»)<br>Κ — Κορωνεία (394 π.Χ.) — ακολουθεί Αγησίλαο<br>Σ — Σκιλλούς (20 χρόνια ζωή στη Σπάρτη)<br>Ε — Εξορία → Κόρινθος → Αθήνα ~365 π.Χ.</div>
+        <strong>Σύγκριση Θουκυδίδη vs Ξενοφώντα (συχνό θέμα!):</strong><br>
+        Θουκ. = φιλοσοφημένος, γλώσσα στρυφνή, ψυχολογικό βάθος<br>
+        Ξεν. = σαφής, ζωντανός «ρεπόρτερ», χωρίς ίδια βάθος ανάλυσης
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 2. ΕΡΓΟ & ΙΔΕΕΣ ─── -->
+  <section class="section">
+    <div class="section-title">2. ΕΡΓΟ — ΙΔΕΕΣ <span class="sos sos-badge sos-3">★★★ ΕΞΕΤΑΣΙΜΟ</span></div>
+
+    <div class="reveal card">
+      <div class="card-title">Δύο Μορφές-Πρότυπα</div>
+      <div class="grid-2">
+        <div style="background:rgba(0,255,159,.05);border:1px solid rgba(0,255,159,.15);border-radius:12px;padding:16px;">
+          <strong style="color:var(--neon-g)">ΣΩΚΡΑΤΗΣ</strong><br>
+          <span style="color:var(--muted);font-size:.9rem;">Ηθικό πρότυπο ζωής</span>
+        </div>
+        <div style="background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.15);border-radius:12px;padding:16px;">
+          <strong style="color:var(--neon-b)">ΑΓΗΣΙΛΑΟΣ</strong><br>
+          <span style="color:var(--muted);font-size:.9rem;">Ηγετικά προσόντα, απλότητα</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Κατηγορίες Έργων</div>
+      <div class="grid-2">
+        <div>
+          <p style="color:var(--neon-g);font-family:var(--font-h);font-size:.75rem;letter-spacing:2px;margin-bottom:10px;">ΙΣΤΟΡΙΚΑ</p>
+          <ul class="loot">
+            <li><strong>Κύρου Ἀνάβασις:</strong> Εκστρατεία «μυρίων» (401 π.Χ.) — Κούναξα ως Εύξεινο Πόντο</li>
+            <li><strong>Ἑλληνικά:</strong> Γεγονότα 411–362 π.Χ. (συνέχεια Θουκυδίδη)</li>
+            <li><strong>Ἀγησίλαος:</strong> Εγκωμιαστική βιογραφία Σπαρτιάτη βασιλιά</li>
+            <li><strong>Λακεδαιμονίων Πολιτεία:</strong> Στρατιωτική οργάνωση &amp; θεσμοί Σπάρτης</li>
+            <li><strong>Κύρου Παιδεία:</strong> Μυθιστορηματική βιογραφία Κύρου Μεγάλου</li>
+          </ul>
+        </div>
+        <div>
+          <p style="color:var(--neon-b);font-family:var(--font-h);font-size:.75rem;letter-spacing:2px;margin-bottom:10px;">ΣΩΚΡΑΤΙΚΑ / ΔΙΔΑΚΤΙΚΑ</p>
+          <ul class="loot">
+            <li>Ἀπολογία Σωκράτους</li>
+            <li>Ἀπομνημονεύματα</li>
+            <li>Συμπόσιον</li>
+            <li>Οἰκονομικός</li>
+            <li>Περὶ ἱππικῆς, Ἱππαρχικός</li>
+            <li>Ἱέρων, Πόροι / Περὶ Προσόδων</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Χαρακτηριστικά Γραφής</div>
+      <ul class="loot">
+        <li><strong>Σαφήνεια &amp; ακρίβεια</strong> έκφρασης — απόλυτη ακρίβεια περιγραφής χώρων</li>
+        <li>Ζωντάνια που θυμίζει «<strong>ρεπόρτερ</strong>» — εντυπωσιακές δραματικές σκηνές</li>
+        <li>ΔΕΝ διαθέτει τη διεισδυτικότητα ή βαθειά φιλοσοφημένη σκέψη του Θουκυδίδη</li>
+        <li>Ιδεολογική συνέπεια: καταδικάζει αυθαιρεσία &amp; ανηθικότητα εξουσίας παρά θαυμασμό για Σπάρτη</li>
+        <li>Αποδοκιμάζει κατάληψη Καδμείας (382 π.Χ.) &amp; αποδίδει <strong>θεία τιμωρία</strong> στην ήττα Σπαρτιατών στα Λεύκτρα</li>
+      </ul>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Ειδικά για τα Ελληνικά</div>
+      <ul class="loot">
+        <li>Μοναδικό ιστορικό σύγγραμμα 4ου αι. π.Χ. για εκείνη την εποχή</li>
+        <li>«<strong>Στρωματική σύνθεση</strong>»: το έργο γράφτηκε σε διαφορετικές φάσεις</li>
+        <li>Χρονολόγηση: «εσωτερικές μαρτυρίες» (αναφορές σε γεγονότα) &amp; μελέτη ύφους</li>
+        <li>Πιθανότερη σειρά: <strong>ιστορικά → σωκρατικά → διδακτικά</strong></li>
+      </ul>
+    </div>
+  </section>
+</article>
+
+<div class="level-divider"></div>
+
+<!-- ══════════════════════════════════════════
+     LEVEL 3 — ΞΕΝΟΦΩΝΤΟΣ ΕΛΛΗΝΙΚΑ ΒΙΒΛΙΟ 2
+════════════════════════════════════════════ -->
+<article class="l3" id="l3">
+  <div class="level-header">
+    <div class="level-num">LEVEL 03 · BOSS TIER</div>
+    <h2 class="level-title">ΞΕΝΟΦΩΝΤΟΣ ΕΛΛΗΝΙΚΑ — ΒΙΒΛΙΟ 2</h2>
+    <p class="level-subtitle">Αιγός Ποταμοί · Παράδοση Αθήνας · Τριάκοντα · Θρασύβουλος</p>
+  </div>
+
+  <section class="section">
+    <div class="sos-note reveal">
+      <span class="icon">⚠️</span>
+      <span><strong>Σύνοψη Βιβλίου 2:</strong> Αποτέλεσμα πολέμου &amp; κατάρρευση αθηναϊκής ηγεμονίας (Αιγός Ποταμοί 405 π.Χ.) → καθεστώς Τριάκοντα → αποκατάσταση δημοκρατίας (403 π.Χ.)</span>
+    </div>
+
+    <!-- ── ΚΕΦ 1 §§16-32 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 1 §§16–32</span>
+      <h3>Η Ναυμαχία στους Αιγός Ποταμούς</h3>
+      <span class="sos-badge sos-3">★★★ ΜΕΤΑΦΡΑΣΗ</span>
+    </div>
+    <div class="chapter-body reveal">
+      <p style="margin-bottom:14px;font-size:.95rem;color:var(--muted);">Η συντριπτική ήττα του αθηναϊκού στόλου που σφράγισε το τέλος του Πελοποννησιακού πολέμου.</p>
+      <div class="card-title">Κύριο Νόημα / Πρωτεύοντα Θέματα</div>
+      <ul class="loot">
+        <li><strong>§§16–18:</strong> Αρχικές κινήσεις — ο Λύσανδρος αποκόπτει τον εφοδιασμό της Αθήνας</li>
+        <li><strong>§§19–24:</strong> Κατάληψη Λαμψάκου — παραταγμένοι στόλοι για 4 μέρες (Αθηναίοι <em>αδρανείς</em>)</li>
+        <li><strong>§§25–26:</strong> Προειδοποίηση <strong>Αλκιβιάδη</strong> — απορρίπτεται από στρατηγούς</li>
+        <li><strong>§§27–28:</strong> Το στρατήγημα Λυσάνδρου — αιφνιδιαστική επίθεση &amp; η καταστροφή</li>
+        <li><strong>§§29–32:</strong> Φυγή Κόνωνος — δίκη αιχμαλώτων — εκτέλεση Φιλοκλή</li>
+      </ul>
+      <div class="card-title" style="margin-top:16px;">Βασικά Ερμηνευτικά Σχόλια</div>
+      <ul class="loot">
+        <li>Κυρίαρχη προσωπικότητα: ο <strong>Λύσανδρος</strong> — σύνεση, υπομονή, σχεδιασμός</li>
+        <li>§§16–20: χρόνος <strong>ΠΑΡΑΤΑΤΙΚΟΣ</strong> (διάρκεια) → §§20+: <strong>ΑΟΡΙΣΤΟΣ</strong> (επίσπευση σύγκρουσης)</li>
+        <li>§19 «αἱροῦσι κατὰ κράτος»: <strong>ΙΣΤΟΡΙΚΟΣ ΕΝΕΣΤΩΤΑΣ</strong> — ζωηρότητα αφήγησης</li>
+        <li>§25: Μετοχές δίνουν βάθος ενεργειών (κατιδών... ὁρμοῦντας... μετιόντας... ἔχοντας) + ζωντανός ευθύς λόγος</li>
+        <li>§§30–32: Σύντομες περίοδοι με μεταβατικό <strong>δέ</strong>. Τελευταία λέξη: «<strong>ἀπέσφαξεν</strong>» — απάνθρωπη λήξη</li>
+        <li>Η ολιγωρία των Αθηναίων (§25: τρόφιμα από 15 στάδια, καταφρόνηση Λυσάνδρου) ήταν καθοριστική</li>
+      </ul>
+      <table class="rpg-table">
+        <thead><tr><th>Αρχαία Ελληνικά</th><th>Σημασία / Σχόλιο</th></tr></thead>
+        <tbody>
+          <tr><td>ὁρμῶμαι + ἐκ + γεν.</td><td>εξορμώ από..., έχω ως ορμητήριο</td></tr>
+          <tr><td>τὴν βασιλέως (γῆν) κακῶς ἐποίουν</td><td>λεηλατούσαν τη χώρα του Βασιλέα Περσίας</td></tr>
+          <tr><td>προσείλοντο</td><td>εκλέγω επιπλέον (+ κατηγορηματική μτχ.)</td></tr>
+          <tr><td>ἀνάγομαι</td><td>βγαίνω από λιμάνι στην ανοιχτή θάλασσα</td></tr>
+          <tr><td>αἱρῶ κατὰ κράτος</td><td>κυριεύω με έφοδο</td></tr>
+          <tr><td>ἀριστοποιοῦμαι</td><td>τρώω (μεσημεριανό γεύμα στην αττική πεζογραφία)</td></tr>
+          <tr><td>παραβλήματα παραβάλλω</td><td>τοποθετώ παραπετάσματα για προστασία ναυτών</td></tr>
+          <tr><td>σημαίνω + απαρ.</td><td>δίνω σήμα να...</td></tr>
+          <tr><td>ἀντανάγω</td><td>βγάζω κι εγώ πλοία για αντιμετώπιση</td></tr>
+          <tr><td>μονόκροτοι / δίκροτοι / πλήρεις ναῦς</td><td>μία / δύο σειρές κωπηλάτες / πλήρως επανδρωμένα</td></tr>
+          <tr><td>αἴρω ἀσπίδα</td><td>ναυτικό σήμα: σήκωμα ασπίδας</td></tr>
+          <tr><td>ἐπιλαμβάνομαι + γεν.</td><td>είμαι αντίθετος σε κάτι</td></tr>
+          <tr><td>τριταῖος ἀφικόμενος</td><td>αφού έφτασε μετά από 3 μέρες (ρηματικό επίθ. ως επίρρ.)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- HACK 4 -->
+    <div class="reveal hack-wrap">
+      <button class="hack-btn" onclick="toggleHack(this)">
+        <span class="icon">⚓</span>
+        REVEAL HACK #4 — Αιγός Ποταμοί: «ΛΑΚΦ Rule»
+        <span class="chevron">▼</span>
+      </button>
+      <div class="hack-body">
+        <strong>Τα 4 πρόσωπα της Ναυμαχίας — ΛΑΚΦ:</strong>
+        <div class="mnemonic">Λ — Λύσανδρος (ο νικητής — υπομονή + στρατήγημα)<br>Α — Αλκιβιάδης (προειδοποίησε — αγνοήθηκε)<br>Κ — Κόνων (ο μόνος που διέφυγε)<br>Φ — Φιλοκλής (εκτελέστηκε τελευταίος)</div>
+        <strong>Για τη ζωηρότητα αφήγησης γράψε:</strong> «Ο ιστορικός χρησιμοποιεί Ιστορικό Ενεστώτα ('αἱροῦσι κατὰ κράτος', §19) — μεταφέρει τον αναγνώστη ΜΕΣ στη δράση.»<br><br>
+        <strong>Εύκολη λέξη που μπερδεύει:</strong> «ἀριστοποιοῦμαι» = τρώω ΜΕΣΗΜΕΡΙΑΝΟ. Φαντάσου τον ΑΡΙΣΤΟ (Αριστοτέλης) να τρώει μεσημεριανό.
+      </div>
+    </div>
+
+    <!-- ── ΚΕΦ 2 §§1-4 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 2 §§1–4</span>
+      <h3>Αναγγελία Καταστροφής &amp; Αποκλεισμός Αθήνας</h3>
+      <span class="sos-badge sos-3">★★★ SOS</span>
+    </div>
+    <div class="chapter-body reveal">
+      <div class="card-title">Κύριο Νόημα</div>
+      <ul class="loot">
+        <li><strong>§§1–2:</strong> Λύσανδρος εδραιώνει εξουσία (Βυζάντιο, Καλχηδόνα) — στρατηγική «εκκένωσης» Αθήνας</li>
+        <li><strong>§3:</strong> Αναγγελία καταστροφής <strong>νύχτα</strong> — θρήνος κυλά από Πειραιά ως Άστυ</li>
+        <li><strong>§4:</strong> Έκτακτη Εκκλησία — απόφαση πολεμικής θέσης (αποχώσαι λιμένας, ευτρεπίζειν τείχη)</li>
+      </ul>
+      <div class="quote-box">
+        <div class="quote-label">§3 — Η νύχτα της καταστροφής</div>
+        «οἰμωγὴ ἐκ τοῦ Πειραιῶς διὰ τῶν μακρῶν τειχῶν εἰς ἄστυ διῆκεν... ὥστ᾽ ἐκείνης τῆς νυκτὸς οὐδεὶς ἐκοιμήθη»
+      </div>
+      <div class="sos-note">
+        <span class="icon">📌</span>
+        <span>Οι Αθηναίοι φοβούνταν να πάθουν ό,τι έκαναν στους Μηλίους, Ιστιαιείς, Σκιωναίους, Τορωναίους, Αιγινήτες. ΣΧΕ: Παράθεση Θουκυδίδη για Ιστιαία &amp; Σκιώνη στο σχολικό — συνέδεση ιστορικού πλαισίου.</span>
+      </div>
+      <div class="card-title" style="margin-top:16px;">Ερμηνευτικά Σχόλια</div>
+      <ul class="loot">
+        <li>§§1–2: ΠΑΡΑΤΑΤΙΚΟΣ — κινήσεις Λυσάνδρου εντάσσονται σε πλαίσιο (επιρρηματικές μετοχές)</li>
+        <li>§2: Στρατηγική Λυσάνδρου — να επιστρέψουν <strong>ΟΛΟΙ</strong> Αθηναίοι στην πόλη → γρηγορότερη <strong>ένδεια τροφίμων</strong></li>
+        <li>§3: «κινηματογραφικός» τρόπος αναγγελίας — παρατατικός + μετοχές ενεστώτα (πενθοῦντες, νομίζοντες)</li>
+      </ul>
+      <table class="rpg-table">
+        <thead><tr><th>Αρχαία Ελληνικά</th><th>Σημασία / Σχόλιο</th></tr></thead>
+        <tbody>
+          <tr><td>ὑπόσπονδος</td><td>προστατευόμενος από σπονδές</td></tr>
+          <tr><td>ἁρμοστής</td><td>Σπαρτιάτης διοικητής κατεχόμενης πόλης</td></tr>
+          <tr><td>εἰδώς + επόμ. πρότ.</td><td>γνωρίζοντας ότι... (θᾶττον ἔνδεια ἔσεσθαι)</td></tr>
+          <tr><td>ἐπιτήδεια</td><td>εφόδια, τρόφιμα</td></tr>
+          <tr><td>ἔνδεια</td><td>έλλειψη, στέρηση</td></tr>
+          <tr><td>οἰμωγή</td><td>θρήνος με βογγητά και φωνές (< οἴμοι)</td></tr>
+          <tr><td>ἀποχώννυμι</td><td>φράζω (στόμιο λιμένος)</td></tr>
+          <tr><td>εὐτρεπίζω</td><td>διορθώνω, επισκευάζω</td></tr>
+          <tr><td>πείσεσθαι (< πάσχω)</td><td>να πάθουν — ΠΡΟΣΟΧΗ: ≠ πείθω!</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── ΚΕΦ 2 §§16-23 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 2 §§16–23</span>
+      <h3>Διαπραγματεύσεις &amp; Παράδοση Αθήνας</h3>
+      <span class="sos-badge sos-3">★★★ SOS</span>
+    </div>
+    <div class="chapter-body reveal">
+      <ul class="loot">
+        <li><strong>§16:</strong> <strong>Θηραμένης</strong> ως διαπραγματευτής — μένει 3+ μήνες στον Λύσανδρο (στρατηγική <em>καθυστέρησης</em>)</li>
+        <li><strong>§§17–19:</strong> Πρεσβεία στη Σπάρτη — Κορίνθιοι &amp; Θηβαίοι ζητούν <strong>εξόντωση</strong> Αθήνας</li>
+        <li><strong>§20:</strong> Σπαρτιάτες αρνούνται να εξανδραποδίσουν πόλη που «<strong>μέγα ἀγαθὸν εἰργάσθαι</strong>» στους Περσικούς</li>
+        <li><strong>§§21–22:</strong> Ακριβείς <strong>Όροι Ειρήνης</strong> — Θηραμένης υπερασπίζεται αποδοχή τους</li>
+        <li><strong>§23:</strong> Λύσανδρος καταπλέει στον Πειραιά — κατεδάφιση τειχών <strong>με αυλητρίδες</strong></li>
+      </ul>
+      <div class="info-highlight">
+        <strong style="color:var(--neon-b)">ΟΡΟΙ ΕΙΡΗΝΗΣ (§20):</strong><br>
+        • Κατεδάφιση Μακρών Τειχών &amp; Πειραιά<br>
+        • Παράδοση στόλου (πλην 12 πλοίων)<br>
+        • Κατάθεση φυγάδων<br>
+        • Ακολουθία στους Σπαρτιάτες κατά γη και θάλασσα<br>
+        • «Τον αυτόν εχθρόν και φίλον νομίζειν Λακεδαιμονίοις»
+      </div>
+      <div class="quote-box">
+        <div class="quote-label">§23 — Συμβολική εικόνα</div>
+        «τὰ τείχη κατέσκαπτον ὑπ᾽ αὐλητρίδων πολλῇ προθυμίᾳ, νομίζοντες ἐκείνην τὴν ἡμέραν τῇ Ἑλλάδι ἄρχειν τῆς ἐλευθερίας»
+      </div>
+      <div class="sos-note"><span class="icon">📌</span><span>Ειρωνεία: η «ελευθερία» εγκαινιάζεται με κατεδάφιση — ουσιαστικά αρχίζει νέα σπαρτιατική κυριαρχία.</span></div>
+      <table class="rpg-table">
+        <thead><tr><th>Αρχαία Ελληνικά</th><th>Σημασία / Σχόλιο</th></tr></thead>
+        <tbody>
+          <tr><td>ἐξανδραποδίζω τὴν πόλιν</td><td>υποδουλώνω ολόκληρη πόλη</td></tr>
+          <tr><td>ἐπιτηρέω, -ῶ</td><td>καιροφυλακτώ, περιμένω ευκαιρία</td></tr>
+          <tr><td>δέκατος αὐτός</td><td>μαζί με άλλους εννέα = δέκα συνολικά</td></tr>
+          <tr><td>ἔφοροι (< ἐπί + ὁρῶ)</td><td>οι 5 Σπαρτιάτες ελεγκτές — ύπατη εξουσία</td></tr>
+          <tr><td>αὐτοκράτωρ πρεσβευτής</td><td>πληρεξούσιος πρεσβευτής με απόλυτη εξουσία</td></tr>
+          <tr><td>οὐκ ἔφασαν ἀνδραποδιεῖν</td><td>= ἔφασαν οὐκ ἀνδραποδιεῖν (άρνηση στον πλάγιο λόγο)</td></tr>
+          <tr><td>καθελόντας — καθαιρῶ</td><td>γκρεμίζω (τα τείχη)</td></tr>
+          <tr><td>καθέντας — καθίημι</td><td>φέρνω πίσω (τους εξόριστους)</td></tr>
+          <tr><td>κάτειμι</td><td>επιστρέφω στην πατρίδα (για εξόριστο)</td></tr>
+          <tr><td>ἄρχειν τινός</td><td>αρχίζω κάτι — «τῇ Ἑλλάδι ἄρχειν τῆς ἐλευθερίας»</td></tr>
+        </tbody>
+      </table>
+
+      <!-- HACK 5 -->
+      <div class="hack-wrap" style="margin-top:16px;">
+        <button class="hack-btn" onclick="toggleHack(this)">
+          <span class="icon">🏛️</span>
+          REVEAL HACK #5 — Αυλητρίδες &amp; Ειρωνεία
+          <span class="chevron">▼</span>
+        </button>
+        <div class="hack-body">
+          <strong>Η «αυλητρίδες» εικόνα (§23) είναι ΤΟ πιο συμβολικό στιγμιότυπο — πέφτει σχεδόν πάντα στις εξετάσεις:</strong>
+          <div class="mnemonic">Αυλητρίδες = γυναίκες ευτελούς επαγγέλματος<br>→ κατεδαφίζουν τα «Μακρά Τείχη» = σύμβολο αθηναϊκής ισχύος<br>→ νομίζουν ότι «ελευθερία» αρχίζει<br>→ αλλά ΜΙΑ κυριαρχία (αθηναϊκή) αντικαθίσταται από ΑΛΛΗ (σπαρτιατική)</div>
+          <strong>Για εξεταστικό σχόλιο γράψε:</strong> «Η εικόνα αυτή είναι φορτισμένη με ειρωνεία: ο Ξενοφών αντιπαρατάσσει την επίφαση χαράς ("πολλῇ προθυμίᾳ") με την ουσία της ήττας.»
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ΚΕΦ 3 §§11-16 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 3 §§11–16</span>
+      <h3>Καθεστώς Τριάκοντα: Αρχές &amp; Εσωτερικές Αντιθέσεις</h3>
+      <span class="sos-badge sos-3">★★★ ΜΕΤΑΦΡΑΣΗ</span>
+    </div>
+    <div class="chapter-body reveal">
+      <ul class="loot">
+        <li><strong>§11:</strong> Εκλογή <strong>Τριάκοντα</strong> — αναβολή σύνταξης νόμων, αυθαίρετη διακυβέρνηση</li>
+        <li><strong>§12:</strong> Δίωξη «<strong>συκοφαντών</strong>» (αρχικά θεωρείται δικαιολογημένη)</li>
+        <li><strong>§13:</strong> Αίτημα για σπαρτιατική φρουρά (αίσθημα ανασφάλειας)</li>
+        <li><strong>§14:</strong> Κολακεία Καλλίβιου — φρουροί ως εργαλείο κατά πολιτικών αντιπάλων</li>
+        <li><strong>§§15–16:</strong> Ρήξη <strong>Κριτία–Θηραμένη</strong>: ο Κριτίας θέλει πολλές εκτελέσεις — ο Θηραμένης αντιτίθεται</li>
+      </ul>
+      <div class="sos-note"><span class="icon">📌</span><span>Σε 8 μήνες εκτελέστηκαν <strong>1.500 Αθηναίοι και μέτοικοι</strong>.</span></div>
+      <div class="card-title" style="margin-top:14px;">Ερμηνευτικά Σχόλια</div>
+      <ul class="loot">
+        <li>Κλιμάκωση: αλληλουχία χρονικών προτάσεων &amp; μετοχών φανερώνει σταδιακή εξέλιξη προς <strong>τυραννία</strong></li>
+        <li>§11: Ενώ εντολή τους ήταν να γράψουν νόμους («ἐφ᾽ ᾧ τε συγγράψαι νόμους»), ανέβαλλαν συνεχώς</li>
+        <li>§13: Ζήτησαν Σπαρτιάτες φρουρούς παρασκηνιακά από Λύσανδρο, ΟΧΙ από εφόρους</li>
+        <li>§16: «ὥσπερ τυραννίδος» — ο Κριτίας ομολογεί τον αυθαίρετο χαρακτήρα</li>
+      </ul>
+      <div class="quote-box">
+        <div class="quote-label">Κριτίας στον Θηραμένη (§16)</div>
+        «κι αν φαντάζεσαι ότι επειδή είμαστε τριάντα κι όχι ένας η εξουσία μας δε χρειάζεται τόση φροντίδα όσο και μια προσωπική τυραννία, είσαι ανόητος»
+      </div>
+    </div>
+
+    <!-- ── ΚΕΦ 3 §§50-56 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 3 §§50–56</span>
+      <h3>Δίκη &amp; Εκτέλεση Θηραμένη</h3>
+      <span class="sos-badge sos-3">★★★ SOS</span>
+    </div>
+    <div class="chapter-body reveal">
+      <ul class="loot">
+        <li><strong>§50:</strong> Κριτίας καταλαβαίνει ότι η Βουλή θα αθωώσει Θηραμένη — βγαίνει να μιλήσει στους ένοπλους</li>
+        <li><strong>§51:</strong> Κριτίας εξαλείφει τον Θηραμένη από τον κατάλογο (<em>εκτός καταλόγου = στη διακριτική ευχέρεια των 30</em>)</li>
+        <li><strong>§52:</strong> Θηραμένης καταφεύγει στην <strong>εστία</strong> — ζητά «ἐννομώτατα» (εφαρμογή νόμου)</li>
+        <li><strong>§§53–54:</strong> Θηραμένης εκφράζει αγανάκτηση για παρανομία — Κριτίας στέλνει τους <strong>Ένδεκα</strong></li>
+        <li><strong>§§55–56:</strong> Σύρσιμο από βωμό — τελευταία λόγια — εκτέλεση</li>
+      </ul>
+      <div class="quote-box">
+        <div class="quote-label">Θαυμασμός Ξενοφώντα για Θηραμένη</div>
+        «ἐκεῖνο κρίνω τοῦ ἀνδρὸς ἀγαστόν, τὸ τοῦ θανάτου παρεστηκότος μήτε τὸ φρόνιμον μήτε τὸ παιγνιῶδες ἀπολιπεῖν ἐκ τῆς ψυχῆς»
+      </div>
+      <div class="quote-box">
+        <div class="quote-label">Τελευταία λόγια Θηραμένη (§56)</div>
+        «Κριτίᾳ τοῦτ᾽ ἔστω τῷ καλῷ» — ρίχνει το υπόλοιπο κώνειο ως «κοτταβισμό»
+      </div>
+      <div class="sos-note"><span class="icon">⚠️</span><span><strong>«Παρωδία δίκης»:</strong> ο Κριτίας εκτελεί πρώτα και δικαιολογεί μετά.</span></div>
+      <table class="rpg-table">
+        <thead><tr><th>Αρχαία Ελληνικά</th><th>Σημασία / Σχόλιο</th></tr></thead>
+        <tbody>
+          <tr><td>δρύφακτα (< δρῦς + φράττω)</td><td>κιγκλιδώματα αίθουσας βουλής</td></tr>
+          <tr><td>ἐξαλείφω ἐκ τοῦ καταλόγου</td><td>διαγράφω (= ἔξω νόμου)</td></tr>
+          <tr><td>οὐ βιωτὸν ἡγοῦμαί τι</td><td>θεωρώ κάτι ανυπόφορο</td></tr>
+          <tr><td>κύριός εἰμι + απαρ.</td><td>έχω το δικαίωμα να...</td></tr>
+          <tr><td>λυμαίνομαι (< λῦμα)</td><td>καταστρέφω</td></tr>
+          <tr><td>συνδοκοῦν — αιτ. απόλυτη</td><td>με τη σύμφωνη γνώμη όλων μας</td></tr>
+          <tr><td>ἱκετεύω τὰ ἐννομώτατα</td><td>ζητώ τα πιο νόμιμα πράγματα</td></tr>
+          <tr><td>ἀπάγχομαι</td><td>απαγχονίζομαι</td></tr>
+          <tr><td>κοτταβίζω</td><td>παίζω κοτταβισμό (ρίχνω υπόλοιπο κρασιού σε σκοπό)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── ΚΕΦ 4 §§1-17 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 4 §§1–17</span>
+      <h3>Θρασύβουλος &amp; Αρχή Αντίστασης</h3>
+      <span class="sos-badge sos-3">★★★ ΜΕΤΑΦΡΑΣΗ</span>
+    </div>
+    <div class="chapter-body reveal">
+      <ul class="loot">
+        <li><strong>§1:</strong> Ακρότητες Τριάκοντα μετά Θηραμένη — πρόσφυγες στα Μέγαρα &amp; Θήβα</li>
+        <li><strong>§§2–4:</strong> Κατάληψη φρουρίου <strong>Φυλής</strong> από Θρασύβουλο (70 άνδρες) — αποτυχία Τριάκοντα λόγω <strong>χιονιάς</strong></li>
+        <li><strong>§§5–7:</strong> Αιφνιδιαστική νυκτερινή επίθεση — νίκη Θρασυβούλου, <strong>120 ολιγαρχικοί νεκροί</strong></li>
+        <li><strong>§8:</strong> Κατάληψη Ελευσίνας ως καταφύγιο από Τριάκοντα</li>
+        <li><strong>§§10–11:</strong> Θρασύβουλος στον <strong>Πειραιά</strong> — αντίπαλοι στη Μουνιχία</li>
+        <li><strong>§§12–17:</strong> Παράταξη — λόγος Θρασυβούλου πριν από τη μάχη</li>
+      </ul>
+      <div class="card-title" style="margin-top:14px;">Ερμηνευτικά Σχόλια</div>
+      <ul class="loot">
+        <li>Το χιόνι (§3): ακόμη και η φύση αντιστρατεύεται τους τυράννους (ειρωνεία αφήγησης)</li>
+        <li>Από μικρή ομάδα 70 ανδρών ξεκινά η απελευθέρωση — αυξητική κλιμάκωση</li>
+        <li>«τῶν σφετέρων τις» — γ΄ πρόσωπο κτητική αντωνυμία</li>
+        <li>«ἡγησόμεθα» (ηγούμαι = βαδίζω μπροστά)</li>
+      </ul>
+    </div>
+
+    <!-- ── ΚΕΦ 4 §§18-23 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 4 §§18–23</span>
+      <h3>Νίκη Δημοκρατικών &amp; Κατάρρευση Ολιγαρχίας</h3>
+      <span class="sos-badge sos-2">★★ ΣΗΜΑΝΤΙΚΟ</span>
+    </div>
+    <div class="chapter-body reveal">
+      <ul class="loot">
+        <li><strong>§§18–19:</strong> Ο μάντης θυσιάζεται πρώτος — νίκη δημοκρατικών — <strong>Κριτίας &amp; Χαρμίδης νεκροί</strong></li>
+        <li><strong>§§20–22:</strong> Προσφώνηση <strong>Κλεόκριτου</strong> (κήρυκας μυστών) — έκκληση για συμφιλίωση</li>
+        <li><strong>§23:</strong> Διάσπαση ολιγαρχικών — καταψηφίζουν Τριάκοντα — εκλέγουν <strong>Δέκα</strong></li>
+      </ul>
+      <div class="quote-box">
+        <div class="quote-label">Λόγος Κλεόκριτου (§§20–21)</div>
+        «Ἄνδρες πολῖται, τί ἡμᾶς ἐξελαύνετε; τί ἀποκτεῖναι βούλεσθε; Ἡμεῖς γὰρ ὑμᾶς κακὸν μὲν οὐδὲν πώποτε ἐποιήσαμεν, μετεσχήκαμεν δὲ ὑμῖν καὶ ἱερῶν τῶν σεμνοτάτων...»
+      </div>
+      <div class="sos-note"><span class="icon">📌</span>
+        <span>«ὀλίγου δεῖν πλείους ἀπεκτόνασιν Ἀθηναίων ἐν ὀκτὼ μησὶν ἢ πάντες Πελοποννήσιοι δέκα ἔτη πολεμοῦντες» (§21): αριθμητική σύγκριση — κατηγορητικό της τυραννίας.</span>
+      </div>
+      <table class="rpg-table">
+        <thead><tr><th>Αρχαία Ελληνικά</th><th>Σημασία / Σχόλιο</th></tr></thead>
+        <tbody>
+          <tr><td>τῶν σφετέρων τις</td><td>κάποιος από τους δικούς τους (γ΄ πρόσ.: σφέτεροι)</td></tr>
+          <tr><td>τιτρώσκομαι</td><td>τραυματίζομαι</td></tr>
+          <tr><td>ἐκπηδῶ</td><td>πηδάω ορμητικά μπροστά</td></tr>
+          <tr><td>ἐμπίπτω τινί</td><td>πέφτω πάνω σε κάποιον</td></tr>
+          <tr><td>μέχρι τοῦ ὁμαλοῦ</td><td>ως το ίσιωμα (γεν. χρόνος/σημείο)</td></tr>
+          <tr><td>σκυλεύω</td><td>λαφυραγωγώ νεκρό εχθρό</td></tr>
+          <tr><td>ἐξόν + απαρ. (αιτ. απόλ.)</td><td>ενώ είναι δυνατόν / εφόσον επιτρέπεται</td></tr>
+          <tr><td>ὀλίγου δεῖν</td><td>σχεδόν, παρά λίγο</td></tr>
+          <tr><td>καταπαύω τινά</td><td>απολύω, αφαιρώ αξίωμα</td></tr>
+          <tr><td>ἕνα ἀπὸ φυλῆς</td><td>ένα από κάθε φυλή</td></tr>
+          <tr><td>κηδεστία</td><td>συγγένεια εξ αγχιστείας</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</article>
+
+<div class="level-divider"></div>
+
+<!-- ══════════════════════════════════════════
+     LEVEL 4 — ΘΟΥΚΥΔΙΔΟΥ ΙΣΤΟΡΙΑΙ ΒΙΒΛΙΟ 3
+════════════════════════════════════════════ -->
+<article class="l4" id="l4">
+  <div class="level-header">
+    <div class="level-num">LEVEL 04 · BOSS TIER</div>
+    <h2 class="level-title">ΘΟΥΚΥΔΙΔΟΥ ΙΣΤΟΡΙΑΙ — ΒΙΒΛΙΟ 3</h2>
+    <p class="level-subtitle">Εμφύλιος Κέρκυρας · Σφαγές · Παθολογία Εμφυλίου (Κεφ. 82-83)</p>
+  </div>
+
+  <section class="section">
+    <div class="info-highlight reveal">
+      <strong>Βιβλίο 3ο:</strong> Γεγονότα 4ου–6ου έτους πολέμου. Τρία κύρια επεισόδια:<br>
+      α) Αποστασία Μυτιλήνης (3.2-50) &nbsp;|&nbsp; β) Πτώση Πλαταιών (3.52-68) &nbsp;|&nbsp; γ) Εμφύλιος Κέρκυρας (3.69-85)
+    </div>
+
+    <!-- ── ΚΕΦ 70 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 70</span>
+      <h3>Αρχή Εμφύλιου Κέρκυρας — Δίκη &amp; Θάνατος Πειθία</h3>
+      <span class="sos-badge sos-3">★★★ SOS</span>
+    </div>
+    <div class="chapter-body reveal">
+      <ul class="loot">
+        <li><strong>§§1–2:</strong> Ολιγαρχικοί αιχμάλωτοι από Κόρινθο επιστρέφουν — στόχος: αποσχίσουν Κέρκυρα από Αθήνα. Η Κέρκυρα ψηφίζει παραμονή στη συμμαχία</li>
+        <li><strong>§§3–5:</strong> Ο <strong>Πειθίας</strong> (εθελοπρόξενος Αθηναίων, αρχηγός δημοκρατικών) δικάζεται — αθωώνεται — αντικαταγγέλλει τους ολιγαρχικούς</li>
+        <li><strong>§6:</strong> Ολιγαρχικοί φοβούνται νέα κίνηση Πειθία → εισβάλλουν στη Βουλή με <strong>εγχειρίδια</strong> → σκοτώνουν Πειθία + ~60 βουλευτές</li>
+      </ul>
+      <div class="quote-box">
+        <div class="quote-label">J.H. Finley — Θουκυδίδης, σ. 186</div>
+        «Ο εμφύλιος σπαραγμός στην Κέρκυρα το καλοκαίρι του 427 π.Χ. αποτελεί μία από τις πιο σκοτεινές σελίδες στη διάρκεια του Πελ/κού πολέμου»
+      </div>
+      <div class="card-title" style="margin-top:14px;">Ερμηνευτικά</div>
+      <ul class="loot">
+        <li>«τῷ μὲν λόγῳ... ἔργῳ δέ» (§1): Τυπική θουκυδίδεια <strong>αντίθεση εμφάνειας-πραγματικότητας</strong></li>
+        <li>«ἐξαπιναίως» (§6) = αρχαϊκός τύπος (≠ κοιν. ἐξαπίνης) — γλωσσικό σχόλιο βιβλίου</li>
+      </ul>
+      <table class="rpg-table">
+        <thead><tr><th>Αρχαία Ελληνικά</th><th>Σημασία / Σχόλιο</th></tr></thead>
+        <tbody>
+          <tr><td>ἐστασίαζον — στασιάζω</td><td>βρίσκομαι σε εμφύλια διαμάχη</td></tr>
+          <tr><td>ἐθελοπρόξενος</td><td>εθελοντής πρόξενος (< ἐθελο- + πρόξενος)</td></tr>
+          <tr><td>προειστήκει τοῦ δήμου</td><td>ήταν αρχηγός δημοκρατικής παράταξης</td></tr>
+          <tr><td>ὑπάγω ἐς δίκην</td><td>σέρνω στο δικαστήριο</td></tr>
+          <tr><td>ἀποφεύγω (δικαστ.)</td><td>απαλλάσσομαι, αθωώνομαι (≠ φεύγω!)</td></tr>
+          <tr><td>ἀνθυπάγω</td><td>κάνω αντιμήνυση</td></tr>
+          <tr><td>χάραξ, ακος, ο</td><td>βέργα/φούρκα για κλημάτινα</td></tr>
+          <tr><td>ὀφλισκάνω</td><td>καταδικάζομαι να πληρώσω πρόστιμο</td></tr>
+          <tr><td>ξυνίσταμαι</td><td>συνωμοτώ</td></tr>
+          <tr><td>ἐγχειρίδια</td><td>μαχαίρια</td></tr>
+          <tr><td>ἐξαπιναίως (αρχαϊκ.)</td><td>ξαφνικά (κοιν. ἐξαπίνης)</td></tr>
+          <tr><td>κτείνω</td><td>φονεύω</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── ΚΕΦ 71-73 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 71–73</span>
+      <h3>Ολιγαρχικοί Αποφασίζουν Ουδετερότητα — Εμφύλια Σύγκρουση</h3>
+      <span class="sos-badge sos-3">★★★ SOS</span>
+    </div>
+    <div class="chapter-body reveal">
+      <ul class="loot">
+        <li><strong>71:</strong> Ολιγαρχικοί συγκαλούν Εκκλησία → επιβάλλουν ψήφο ουδετερότητας (μία ναύς = φίλος, περισσότερα = πολέμιοι) → πρεσβεία Αθήνα</li>
+        <li><strong>72:</strong> Αθηναίοι συλλαμβάνουν πρέσβεις. Κορινθιακή τριήρης + Λακεδαιμόνιοι πρέσβεις → ολιγαρχικοί επιτίθενται στον δήμο &amp; νικούν</li>
+        <li><strong>73:</strong> Δήμος φεύγει σε ακρόπολη — ολιγαρχικοί κρατούν αγορά. Και οι δύο καλούν <strong>δούλους</strong> με υπόσχεση ελευθερίας</li>
+      </ul>
+      <div class="card-title" style="margin-top:14px;">Ερμηνευτικά</div>
+      <ul class="loot">
+        <li>«ἐπικυρῶσαι ἠνάγκασαν τὴν γνώμην» (71.1): αντίφαση — συγκαλούν δημοκρατικό όργανο αλλά <strong>εξαναγκάζουν</strong></li>
+        <li>73: Η πλειοψηφία δούλων πήγε με τους <strong>δημοκρατικούς</strong> — η υπόσχεση ελευθερίας ήταν πειστικότερη</li>
+      </ul>
+      <table class="rpg-table">
+        <thead><tr><th>Αρχαία Ελληνικά</th><th>Σημασία / Σχόλιο</th></tr></thead>
+        <tbody>
+          <tr><td>ἐπικυρόω, -ῶ</td><td>επικυρώνω (μια γνώμη/πρόταση)</td></tr>
+          <tr><td>ἡσυχάζω</td><td>μένω ουδέτερος, ήσυχος</td></tr>
+          <tr><td>νεωτερίζω</td><td>κάνω επανάσταση, ανατρέπω καθεστώς</td></tr>
+          <tr><td>κατέθεντο εἰς Αἴγιναν</td><td>τους φυλάκισαν στην Αίγινα</td></tr>
+          <tr><td>τὰ μετέωρα τῆς πόλεως</td><td>τα υψώματα &amp; οχυρά μέρη</td></tr>
+          <tr><td>ἀκροβολίζομαι</td><td>αψιμαχώ, κάνω μικροεπιθέσεις</td></tr>
+          <tr><td>ὑπισχνέομαι</td><td>υπόσχομαι</td></tr>
+          <tr><td>ἐπίκουροι</td><td>μισθοφόροι (επικουρικές δυνάμεις)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── ΚΕΦ 74 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 74</span>
+      <h3>Νίκη Δημοκρατικών &amp; Εμπρησμός</h3>
+      <span class="sos-badge sos-2">★★ ΣΗΜΑΝΤΙΚΟ</span>
+    </div>
+    <div class="chapter-body reveal">
+      <ul class="loot">
+        <li><strong>§1:</strong> Αποφασιστική νίκη δήμου — <strong>γυναίκες βάλλουν κεραμίδια</strong></li>
+        <li><strong>§2:</strong> Ολιγαρχικοί (φόβος έφοδος στο νεώριο) εμπρήζουν σπίτια γύρω από αγορά — κίνδυνος ολικής καταστροφής πόλης</li>
+        <li><strong>§3:</strong> Κορινθιακό πλοίο &amp; μισθοφόροι φεύγουν κρυφά. Νύχτα ηρεμία</li>
+      </ul>
+      <ul class="loot">
+        <li>«αἵ τε γυναῖκες... παρὰ φύσιν ὑπομένουσαι τὸν θόρυβον» (§1): εξαίρει τόλμη γυναικών που υπερβαίνει τη φύση τους</li>
+        <li>«δείσαντες οἱ ὀλίγοι» (§2): εμπρησμός = απονενοημένη ενέργεια φόβου</li>
+        <li>«δείλη ὀψία» (≈ 16:00–18:00): αρχαία διαίρεση ημέρας</li>
+      </ul>
+      <table class="rpg-table">
+        <thead><tr><th>Αρχαία Ελληνικά</th><th>Σημασία / Σχόλιο</th></tr></thead>
+        <tbody>
+          <tr><td>διαλιπούσης ἡμέρας (γεν. απόλ.)</td><td>κι αφού πέρασε μια μέρα</td></tr>
+          <tr><td>κέραμος</td><td>κεραμίδια</td></tr>
+          <tr><td>τροπή</td><td>υποχώρηση, φυγή</td></tr>
+          <tr><td>αὐτοβοεί</td><td>με τον πρώτο αλαλαγμό, αιφνιδιαστικά</td></tr>
+          <tr><td>νεώριον</td><td>ναύσταθμος</td></tr>
+          <tr><td>ἐμπίπρημι / ἐμπιπρᾶσι</td><td>πυρπολώ (ανώμαλος σχηματισμός — ≠ ἐμπιμπρᾶσι)</td></tr>
+          <tr><td>ξυνοικία</td><td>πολυκατοικία (πολλές οικογένειες)</td></tr>
+          <tr><td>φείδομαι</td><td>μεταχειρίζομαι με φειδώ</td></tr>
+          <tr><td>ὑπεξανάγομαι</td><td>ανοίγομαι κρυφά στο πέλαγος</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── ΚΕΦ 75 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 75</span>
+      <h3>Άφιξη Νικόστρατου &amp; Αστάθεια</h3>
+      <span class="sos-badge sos-2">★★ ΣΗΜΑΝΤΙΚΟ</span>
+    </div>
+    <div class="chapter-body reveal">
+      <ul class="loot">
+        <li><strong>§1:</strong> <strong>Νικόστρατος</strong> (Αθηναίος στρατηγός, Ναύπακτος) με 12 πλοία + 500 Μεσσήνιοι — επιδιώκει <strong>συμφιλίωση</strong> (δίκη 10 αιτιωτάτων, σπονδές)</li>
+        <li><strong>§§2–3:</strong> Κεφαλαίοι δημοκρατικοί πείθουν Νικόστρατο να αφήσει 5 πλοία — κατατάσσουν ολιγαρχικούς στα πληρώματα</li>
+        <li><strong>§§4–5:</strong> Ολιγαρχικοί αρνούνται — καθίζουν ικέτες στο <strong>Ήραιο</strong> — ο δήμος τους εκτοπίζει στο νησί απέναντι</li>
+      </ul>
+      <div class="sos-note"><span class="icon">💡</span><span>Νικόστρατος = ο «υποδειγματικός» ηγέτης — πολιτική ευφυΐα, ανθρωπισμός, σύνεση. Αντιπαρατίθεται με τον Ευρυμέδοντα (Κεφ. 81).</span></div>
+      <table class="rpg-table">
+        <thead><tr><th>Αρχαία Ελληνικά</th><th>Σημασία / Σχόλιο</th></tr></thead>
+        <tbody>
+          <tr><td>ξύμβασιν ἔπρασσε</td><td>επεδίωκε συμφιλίωση</td></tr>
+          <tr><td>τοὺς αἰτιωτάτους</td><td>τους πιο ένοχους (υπερθετ. αἴτιος)</td></tr>
+          <tr><td>καθίζουσιν ἐς τὸ τῶν Διοσκόρων ἱερόν</td><td>καθίζουν ικέτες σε ιερό Διόσκουρων</td></tr>
+          <tr><td>ἀνίστημι + πείσας</td><td>τους σηκώνω πείθοντάς τους</td></tr>
+          <tr><td>διακομίζω εἰς νῆσον</td><td>μεταφέρω στο νησί</td></tr>
+          <tr><td>τὰ ἐπιτήδεια... διεπέμπετο</td><td>εστέλλοντο εκεί τρόφιμα</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── ΚΕΦ 78 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 78</span>
+      <h3>Ναυμαχία — Αθηναϊκή Τακτική εναντίον Υπεροχής</h3>
+      <span class="sos-badge sos-2">★★ ΣΗΜΑΝΤΙΚΟ</span>
+    </div>
+    <div class="chapter-body reveal">
+      <ul class="loot">
+        <li><strong>§1:</strong> Κερκυραίοι επιτίθενται άτακτα «κακῶς καὶ κατ᾽ ὀλίγας» — δεινοπαθούν</li>
+        <li><strong>§§1–2:</strong> Αθηναίοι: ΟΧΙ ανοιχτή επίθεση — επίθεση <strong>κατὰ κέρας</strong> — καταβυθίζουν ένα πλοίο</li>
+        <li><strong>§§2–3:</strong> Πελοποννήσιοι σχηματίζουν <strong>κύκλο</strong> — Αθηναίοι κάνουν <strong>πρύμναν κρούομαι</strong> (οπισθοδρόμηση χωρίς στροφή)</li>
+        <li><strong>§4:</strong> Ναυμαχία λήγει με δύση ηλίου</li>
+      </ul>
+      <ul class="loot" style="margin-top:10px;">
+        <li>«κακῶς καὶ κατ᾽ ὀλίγας» = κύρια αιτία ήττας Κερκυραίων</li>
+        <li>«ἁθρόαις μὲν οὐ προσέπιπτον... κατὰ κέρας» — αθηναϊκή σύνεση αποκλείει περικύκλωση</li>
+        <li>«σχολῇ ὑποχωρούντων» (§3): σκόπιμη αργή υποχώρηση = παράσυρση Πελ/νησίων μακριά</li>
+      </ul>
+      <table class="rpg-table">
+        <thead><tr><th>Αρχαία Ελληνικά</th><th>Σημασία / Σχόλιο</th></tr></thead>
+        <tbody>
+          <tr><td>κακῶς καὶ κατ᾽ ὀλίγας προσπίπτοντες</td><td>επιτιθέμενοι άτακτα και με λίγα πλοία</td></tr>
+          <tr><td>ἁθρόος, -α, -ον</td><td>συγκεντρωμένος, αθρόος</td></tr>
+          <tr><td>κύκλον τάξασθαι</td><td>σχηματίσουν κυκλική παράταξη</td></tr>
+          <tr><td>πρύμναν κρούομαι</td><td>οπισθοδρομώ χωρίς στροφή</td></tr>
+          <tr><td>σχολῇ (επίρρ.)</td><td>αργά, βραδέως</td></tr>
+          <tr><td>ἐς ἡλίου δύσιν</td><td>με τη δύση ηλίου</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── ΚΕΦ 81 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 81</span>
+      <h3>Η Σφαγή των Ολιγαρχικών</h3>
+      <span class="sos-badge sos-3">★★★ SOS</span>
+    </div>
+    <div class="chapter-body reveal">
+      <ul class="loot">
+        <li><strong>§§1–2:</strong> Πελοποννήσιοι αποπλέουν νύχτα — κρυφά διά Λευκάδος. Κερκυραίοι φέρνουν Μεσσηνίους εντός πόλης</li>
+        <li><strong>§2:</strong> Σφαγή ολιγαρχικών στους δρόμους &amp; στα πλοία</li>
+        <li><strong>§§2–3:</strong> Παρωδία δίκης — 50 ικέτες Ηραίου καταδικάζονται <strong>όλοι εν μία ψήφω</strong>. Οι υπόλοιποι αυτοκτονούν</li>
+        <li><strong>§§4–5:</strong> <strong>7 μέρες σφαγής</strong> (παρουσία Ευρυμέδοντα με 60 πλοία — αδιαφορεί). «Πᾶσα ἰδέα κατέστη θανάτου»</li>
+      </ul>
+      <div class="quote-box">
+        <div class="quote-label">Θουκυδίδης για τον Ευρυμέδοντα</div>
+        «Ημέρας τε ἑπτά... ὁ Εὐρυμέδων... παρέμεινε, Κερκυραῖοι σφῶν αὐτῶν τοὺς ἐχθροὺς δοκοῦντας εἶναι ἐφόνευον»
+      </div>
+      <div class="sos-note"><span class="icon">⚠️</span><span>«καὶ γὰρ πατὴρ παῖδα ἀπέκτεινε» (§5): κατάλυση φυσικής τάξης — ακόμη και η πατρική αγάπη υποχωρεί. Εισαγωγή στα κεφ. 82-83.</span></div>
+      <table class="rpg-table">
+        <thead><tr><th>Αρχαία Ελληνικά</th><th>Σημασία / Σχόλιο</th></tr></thead>
+        <tbody>
+          <tr><td>ἐκομίζοντο ἐπ᾽ οἴκου παρὰ τὴν γῆν</td><td>ταξιδεύαν προς πατρίδα παραθαλάσσια</td></tr>
+          <tr><td>ὑπερφέρω (τὰς ναῦς)</td><td>μεταφέρω πλοία πάνω από στενό ξηράς</td></tr>
+          <tr><td>ἀπεχρῶντο (ἀποχράομαι)</td><td>σκοτώνω (ευφημισμός)</td></tr>
+          <tr><td>δίκην ὑπέχω</td><td>δικάζομαι</td></tr>
+          <tr><td>καταγιγνώσκω τινὸς θάνατον</td><td>καταδικάζω κάποιον σε θάνατο</td></tr>
+          <tr><td>ἀπάγχομαι</td><td>απαγχονίζομαι (< ἄγχω)</td></tr>
+          <tr><td>ἀνηλοῦντο (ἀναλόομαι)</td><td>τερμάτιζαν τη ζωή τους</td></tr>
+          <tr><td>τὴν αἰτίαν ἐπιφέρω τινί</td><td>φέρω κατηγορία εναντίον κάποιου</td></tr>
+          <tr><td>περιοικοδομέομαι</td><td>περιτειχίζομαι</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── ΚΕΦ 82 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 82</span>
+      <h3>Γενική Θεώρηση — Παθολογία Εμφυλίου</h3>
+      <span class="sos-badge sos-3">★★★ ΑΓΝΩΣΤΟ ΚΕΙΜΕΝΟ!</span>
+    </div>
+    <div class="chapter-body reveal">
+      <div class="sos-note"><span class="icon">🔥</span><span><strong>ΚΟΡΥΦΩΣΗ της εξεταστέας ύλης.</strong> Το κεφ. 82 είναι υψίστης σημασίας — εξετάζεται συχνά ως ΑΓΝΩΣΤΟ. Μάθε τη δομή απ᾽ έξω!</span></div>
+      <ul class="loot">
+        <li><strong>§1:</strong> Στάση Κέρκυρας = <strong>πρώτη</strong> — εξαπλώθηκε σε ολόκληρη Ελλάδα</li>
+        <li><strong>§2:</strong> Αίτια: πόλεμος = «<strong>βίαιος διδάσκαλος</strong>» — εξαγριώνει τα πνεύματα</li>
+        <li><strong>§3:</strong> Τακτική επίσπευσης εμφυλίων: υπερβολή, ύπουλα μέσα, ανήκουστες εκδικήσεις</li>
+        <li><strong>§4:</strong> <span style="color:var(--neon-o);font-weight:700;">ΑΛΛΑΓΗ ΣΗΜΑΣΙΑΣ ΛΕΞΕΩΝ:</span> παράλογη τόλμη = «ανδρεία», σωφροσύνη = «δειλία»</li>
+        <li><strong>§§5–7:</strong> Εκδίκηση &gt; προφύλαξη · δόλος &gt; τόλμη · όρκοι = ανούσιοι</li>
+        <li><strong>§8:</strong> Αιτία: φιλαρχία (πλεονεξία + φιλοδοξία) — αρχηγοί κομμάτων χρησιμοποιούν ωραία συνθήματα, επιδιώκουν ατομικά</li>
+      </ul>
+      <div class="quote-box">
+        <div class="quote-label">3.82.2 — Κεντρικό απόφθεγμα</div>
+        «ὁ πόλεμος... βίαιος διδάσκαλος καὶ πρὸς τὰ παρόντα τὰς ὀργὰς τῶν πολλῶν ὁμοιοῖ»
+      </div>
+
+      <!-- HACK 6 -->
+      <div class="hack-wrap" style="margin-top:16px;">
+        <button class="hack-btn" onclick="toggleHack(this)">
+          <span class="icon">🌀</span>
+          REVEAL HACK #6 — Κεφ. 82: «FLIP THE WORD»
+          <span class="chevron">▼</span>
+        </button>
+        <div class="hack-body">
+          <strong>Το πιο γνωστό στοιχείο του κεφ. 82 = η αλλαγή σημασίας λέξεων. Θυμήσου το ως «FLIP»:</strong>
+          <div class="mnemonic">Παράλογη τόλμη → «ανδρεία» ✓<br>Σωφροσύνη/σύνεση → «δειλία» ✓<br>Δόλος → «εξυπνάδα» ✓<br>Ο τίμιος → θεωρείται «κουτός» ✓</div>
+          <strong>Η «αλλαγή σημασίας λέξεων» είναι η πιο ολέθρια συνέπεια εμφυλίων για τον Θουκυδίδη:</strong> η γλώσσα χάνει αξία → αδύνατη κοινωνική συνεννόηση.<br><br>
+          <strong>Ξεχωριστή εξεταστική απάντηση:</strong> Ο Θουκυδίδης ΔΕΝ θεωρεί ανθρώπους ανίατα κακούς. Εξηγεί ψυχολογικά τις συνθήκες — η μεθοδολογία του μοιάζει με ιατρική διάγνωση (επίδραση Ιπποκράτη!).
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ΚΕΦ 83 ── -->
+    <div class="chapter-hdr reveal">
+      <span class="ch-num">ΚΕΦ. 83</span>
+      <h3>Αποτέλεσμα — Αναξιοπιστία &amp; Επικράτηση Κατώτερων</h3>
+      <span class="sos-badge sos-3">★★★ ΑΓΝΩΣΤΟ ΚΕΙΜΕΝΟ!</span>
+    </div>
+    <div class="chapter-body reveal">
+      <ul class="loot">
+        <li><strong>§§1–2:</strong> Ο εμφύλιος εξάπλωσε κακία — δυσπιστία, αδυναμία εμπιστοσύνης</li>
+        <li><strong>§3:</strong> Επικρατούν συνήθως οι «<strong>διανοητικά κατώτεροι</strong>» — επιδίωξη βίαιων πράξεων πριν νικηθούν στη συζήτηση</li>
+        <li><strong>§4:</strong> Οι «έξυπνοι» ομοίως δεν φυλάγονται → αφανίζονται από αντιπάλους</li>
+      </ul>
+      <div class="quote-box">
+        <div class="quote-label">3.83.1 — Για το ήθος</div>
+        «τὸ εὔηθες οὗ τὸ γενναῖον πλεῖστον μετέχει» — Η απλή ευγένεια που ανήκει στη γενναία ψυχή κατέντησε γελοία
+      </div>
+      <div class="sos-note"><span class="icon">📌</span><span>Στο 83.1 ορίζεται ο «εὔηθης» ως ο ευγενής απλοϊκός — εγκωμιαστικός (≠ «βλάκας»). Το κεφ. 83 είναι σαφέστερο &amp; συντομότερο — «εντελέστερη» ψυχολογική ανάλυση.</span></div>
+    </div>
+  </section>
+</article>
+
+<div class="level-divider"></div>
+
+<!-- ══════════════════════════════════════════
+     LEVEL 5 — ΓΡΑΜΜΑΤΙΚΗ & ΣΥΝΤΑΚΤΙΚΟ
+════════════════════════════════════════════ -->
+<article class="l5" id="l5">
+  <div class="level-header">
+    <div class="level-num">LEVEL 05 · FINAL BOSS</div>
+    <h2 class="level-title">ΓΡΑΜΜΑΤΙΚΗ &amp; ΣΥΝΤΑΚΤΙΚΟ</h2>
+    <p class="level-subtitle">Συστηματική επανάληψη βάσει εξεταστέων κειμένων</p>
+  </div>
+
+  <section class="section">
+
+    <!-- Α. ΧΡΟΝΟΙ & ΕΓΚΛΙΣΕΙΣ -->
+    <div class="section-title">Α. ΧΡΟΝΟΙ &amp; ΕΓΚΛΙΣΕΙΣ <span class="sos sos-badge sos-3">★★★</span></div>
+
+    <div class="reveal card">
+      <div class="card-title">Παρατατικός — Αόριστος — Ιστορικός Ενεστώτας</div>
+      <ul class="loot">
+        <li><strong>ΠΑΡΑΤΑΤΙΚΟΣ:</strong> διάρκεια, επανάληψη (Ξεν. 2.1.16-20: κινήσεις αντιπάλων στόλων)</li>
+        <li><strong>ΑΟΡΙΣΤΟΣ:</strong> ορισμένη, εφάπαξ πράξη (Ξεν. 2.1.20: πλησιάζουν → επίσπευση)</li>
+        <li><strong>ΙΣΤΟΡΙΚΟΣ ΕΝΕΣΤΩΤΑΣ:</strong> παραστατική ζωηρότητα — «αἱροῦσι κατὰ κράτος» (Ξεν. 2.1.19)</li>
+        <li><strong>ΚΕΦΑΛΑΙΑ 82-83:</strong> Γνωμικός χρόνος (= χρονική αόριστη αλήθεια) → αόρ./ενεστ. χωρίς συγκεκριμένη σχέση</li>
+      </ul>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Ευκτική — Δυνητική &amp; Επαναληπτική</div>
+      <ul class="loot">
+        <li><strong>ΕΥΚΤΙΚΗ ΠΛ. ΛΟΓΟΥ</strong> (εξάρτηση από ιστ. χρόνο): ἔλεγον ὅτι Λύσανδρος τέως κατέχοι (2.2.17)</li>
+        <li><strong>ΕΥΚΤΙΚΗ ΕΠΑΝΑΛΗΠΤΙΚΗ:</strong> «εἴ τινα λάβοιεν... ἀπέκτεινον» (3.81.2) — συχνή επανάληψη στο παρελθόν</li>
+        <li><strong>ΔΥΝΗΤΙΚΗ ΕΥΚΤΙΚΗ</strong> (ἄν + ευκτ.): διέφθειραν ἄν, εἰ μὴ Νικόστρατος ἐκώλυσε (3.75.4)</li>
+        <li><strong>ΕΥΚΤΙΚΗ ΕΚΚΛΗΤΙΚΗ</strong> (βουλητική): Θηραμένης ζητά «μὴ ἐπὶ Κριτίᾳ εἶναι ἐξαλείφειν»</li>
+      </ul>
+    </div>
+
+    <!-- HACK 7 -->
+    <div class="reveal hack-wrap">
+      <button class="hack-btn" onclick="toggleHack(this)">
+        <span class="icon">🎓</span>
+        REVEAL HACK #7 — Ευκτική: «3 ΡΟΛΟΙ, 3 ΚΩΔΙΚΟΙ»
+        <span class="chevron">▼</span>
+      </button>
+      <div class="hack-body">
+        <strong>3 χρήσεις Ευκτικής που μπερδεύουν — θυμήσου ΠΕΔ:</strong>
+        <div class="mnemonic">Π — Πλ. Λόγου (μετά ιστ. χρόνο) → εξαρτημένη πρόταση ιστ. αφήγησης<br>Ε — Επαναληπτική (εἴ τινα λάβοιεν... ἀπέκτεινον) → παρελθ. επανάληψη<br>Δ — Δυνητική (ἄν + ευκτ.) → «θα μπορούσε να» → ΠΑΝΤΑ με ἄν</div>
+        <strong>Κρίσιμος κανόνας:</strong> Δυνητική = ΠΑΝΤΑ με ἄν. Αν βλέπεις ευκτ. χωρίς ἄν σε δευτερεύουσα → Πλ. Λόγου ή Επαναληπτική. Κοίτα από τι εξαρτάται!
+      </div>
+    </div>
+
+    <!-- Β. ΜΕΤΟΧΕΣ -->
+    <div class="section-title" style="margin-top:32px;">Β. ΜΕΤΟΧΕΣ — Συστηματική Επανάληψη <span class="sos sos-badge sos-3">★★★ ΣΦΑΙΡΑ</span></div>
+
+    <div class="reveal grid-2">
+      <div class="card">
+        <div class="card-title">Επιρρηματικές Μετοχές</div>
+        <ul class="loot">
+          <li><strong>ΧΡΟΝΙΚΗ:</strong> ὡς, ὅτε, ἐπεί + μτχ. — «ἐπεὶ ὄρθρος ἦν, ἐσήμανεν»</li>
+          <li><strong>ΑΙΤΙΟΛΟΓΙΚΗ:</strong> ἐπειδή, ὡς + μτχ. — «δείσαντες οἱ ὀλίγοι»</li>
+          <li><strong>ΥΠΟΘΕΤΙΚΗ</strong> (αντί εἰ): ἂν + μτχ.</li>
+          <li><strong>ΕΝΑΝΤΙΩΜΑΤΙΚΗ:</strong> «καίπερ ἐν πολλῇ ταραχῇ... ὄντας» (3.79.3)</li>
+          <li><strong>ΤΡΟΠΙΚΗ:</strong> «μάλ᾽ εὔφωνος ὤν, κατασιωπησάμενος ἔλεξε» (3.4.20)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Απόλυτες Μετοχές — ΚΡΙΣΙΜΟ!</div>
+        <ul class="loot">
+          <li><strong>ΓΕΝΙΚΗ ΑΠΟΛΥΤΗ:</strong> υποκ. γεν. + μτχ. γεν. (ανεξ. από κύρια πρότ.)</li>
+          <li>Παραδείγματα: «κεκρατηκότος τοῦ δήμου» (3.74.3), «διαλιπούσης δ᾽ ἡμέρας» (3.74.1)</li>
+          <li style="color:var(--neon-o);font-weight:700;">⚠️ ΑΙΤΙΑΤΙΚΗ ΑΠΟΛΥΤΗ (≠ γεν.):</li>
+          <li>«<strong>συνδοκοῦν ἅπασιν ἡμῖν</strong>» (Ξεν. 3.51) = απρόσωπο ρ. → ΑΙΤΙΑΤΙΚΗ</li>
+          <li>«<strong>ἐξόν ἡμῖν ἐν εἰρήνῃ πολιτεύεσθαι</strong>» (Ξεν. 4.22) = αιτ. απόλυτη ανεξάρτητη</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Κατηγορηματική &amp; Ειδικές</div>
+      <ul class="loot">
+        <li>«δήλη ἐγένετο εὐμενῶς ἐπιθορυβήσασα» (Ξεν. 3.50) — μτχ. κατηγορηματική</li>
+        <li>«ἐτύγχανε γὰρ καὶ βουλῆς ὤν» (3.70.5) = συνέβαινε να είναι και βουλευτής</li>
+        <li><strong>λανθάνω + μτχ.</strong> = κάνω κάτι χωρίς να γίνω αντιληπτός</li>
+        <li><strong>τυγχάνω + μτχ.</strong> = τυχαία κάνω κάτι</li>
+        <li><strong>φαίνομαι + μτχ.</strong> = φαίνεται ότι κάνω κάτι (πραγματικά)</li>
+        <li><strong>ἐλπίζω + μτχ.</strong> = ελπίζω ότι κάνω κάτι</li>
+      </ul>
+    </div>
+
+    <!-- HACK 8 -->
+    <div class="reveal hack-wrap">
+      <button class="hack-btn" onclick="toggleHack(this)">
+        <span class="icon">💥</span>
+        REVEAL HACK #8 — Γεν. vs Αιτ. Απόλυτη: Ο «ΑΠΡΟΣΩΠΟ» Κανόνας
+        <span class="chevron">▼</span>
+      </button>
+      <div class="hack-body">
+        <strong>Το πιο συχνό λάθος σε εξετάσεις — θυμήσου τον ΕΝΑΝ κανόνα:</strong>
+        <div class="mnemonic">ΓΕΝΙΚΗ ΑΠΟΛΥΤΗ: μτχ. έχει δικό της υποκείμενο ≠ κύριας πρότ.<br>ΑΙΤΙΑΤΙΚΗ ΑΠΟΛΥΤΗ: ΜΟΝΟ με ΑΠΡΟΣΩΠΟ ρήμα/έκφραση<br>(συνδοκεῖ, ἐξόν, δέον, πρέπον, παρέχον κλπ.)</div>
+        <strong>Test αναγνώρισης:</strong> Βλέπεις μετοχή χωρίς φανερό υποκείμενο στη γεν.? Ψάξε: <em>είναι απρόσωπο ρήμα</em>? Αν ΝΑΙ → ΑΙΤΙΑΤΙΚΗ απόλυτη. Αν ΟΧΙ → Γεν. απόλυτη με αδήλωτο υποκ.
+      </div>
+    </div>
+
+    <!-- Γ. ΔΕΥΤΕΡΕΥΟΥΣΕΣ -->
+    <div class="section-title" style="margin-top:32px;">Γ. ΔΕΥΤΕΡΕΥΟΥΣΕΣ ΠΡΟΤΑΣΕΙΣ <span class="sos sos-badge sos-3">★★★</span></div>
+
+    <div class="reveal grid-2">
+      <div class="card">
+        <div class="card-title">Ειδικές Προτάσεις (ὅτι, ὡς)</div>
+        <ul class="loot">
+          <li>Μετά ρ. λόγου/σκέψης: «ἔλεγεν ὅτι αὐτὸν Λύσανδρος κατέχοι» (πλ. λόγος → ευκτ.)</li>
+          <li>Αρνητικά με <strong>οὐ</strong> (≠ μή)</li>
+          <li>Πλάγιος λόγος Ξεν.: «<strong>οὐκ ἔφασαν ἀνδραποδιεῖν</strong>» = ἔφασαν οὐκ ἀνδραποδιεῖν</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Τελικές Προτάσεις (ἵνα, ὅπως, ὡς)</div>
+        <ul class="loot">
+          <li>Σκοπός παρόντος/μέλλοντος: ὅπως + <strong>υποτακτική</strong></li>
+          <li>Σκοπός παρελθ.: ὅπως + <strong>ευκτ. πλ. λόγου</strong></li>
+          <li>Αρνητικές: ἵνα / ὅπως <strong>μή</strong></li>
+          <li>«ἐπιτηρέω ὅπως + ευκτ.» (Ξεν. 2.2.16)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Υποθετικές Προτάσεις</div>
+      <div class="grid-2">
+        <div>
+          <ul class="loot">
+            <li><strong>ΠΡΑΓΜΑΤΙΚΗ</strong> (εἰ + οριστ.): «εἰ ἄνεμος ἐπεγένετο... ἐκινδύνευσε» (3.74.2)</li>
+            <li><strong>ΔΥΝΑΤΗ</strong> (εἰ + ευκτ., ἄν + ευκτ.): «διέφθειραν ἄν, εἰ μὴ... ἐκώλυσε» (3.75.4)</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="loot">
+            <li><strong>ΑΠΛΗ</strong> (εἰ + οριστ. → οριστ. χ. ε.): γνωμικές αλήθειες</li>
+            <li><strong>ΑΟΡΙΣΤΗ ΕΠΑΝΑΛΗΠΤΙΚΗ</strong> (ἐάν/ἤν + υποτ. → οριστ.): «εἴ τινα λάβοιεν... ἀπέκτεινον»</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Αναφορικές — Χρονικές — Αιτιολογικές</div>
+      <ul class="loot">
+        <li><strong>ΑΝΑΦ. ΑΙΤΙΟΛΟΓΙΚΕΣ:</strong> «οἱ γὰρ Κερκυραῖοι ἐστασίαζον, ἐπειδὴ οἱ αἰχμάλωτοι ἦλθον ὑπὸ Κορινθίων ἀφεθέντες» (3.70.1)</li>
+        <li><strong>ΧΡΟΝΙΚΕΣ:</strong> ἐπεί, ὡς, ὅτε, ἐπειδή + οριστ. (ιστ. χρόνος) OR + ευκτ. (πλ. λόγος)</li>
+        <li>«ὡς δ᾽ εἶπεν, εἷλκε» — ὡς <strong>χρονικό</strong> (αμέσως μόλις)</li>
+      </ul>
+    </div>
+
+    <!-- Δ. ΑΠΑΡΕΜΦΑΤΑ & ΠΛΑΓΙΟΣ ΛΟΓΟΣ -->
+    <div class="section-title" style="margin-top:32px;">Δ. ΑΠΑΡΕΜΦΑΤΑ &amp; ΠΛΑΓΙΟΣ ΛΟΓΟΣ <span class="sos sos-badge sos-3">★★★</span></div>
+
+    <div class="reveal card">
+      <div class="card-title">Κατηγορηματικό Απαρέμφατο</div>
+      <ul class="loot">
+        <li>«ἔδοξε τοὺς λιμένας ἀποχῶσαι» (Ξεν. 2.2.4) — απρόσ. ρ. + απαρ.</li>
+        <li>«<strong>κύριός εἰμι + απαρ.</strong>» = έχω δικαίωμα να...</li>
+        <li>«<strong>οὐ βιωτὸν ἡγοῦμαί τι</strong>» (Ξεν. 3.50) = θεωρώ αδύνατο να ζω</li>
+      </ul>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Ειδικό Απαρέμφατο (Πλάγιος Λόγος)</div>
+      <ul class="loot">
+        <li>«ἔλεγεν ὡς χρὴ πείθεσθαι Λακεδαιμονίοις» (Ξεν. 2.2.22)</li>
+        <li>«<strong>ἔφασαν πόλιν Ἑλληνίδα οὐκ ἀνδραποδιεῖν</strong>» — άρνηση οὐ</li>
+        <li>«ἐπυνθάνοντο τὸν Πειθίαν μέλλειν ἀναπείσειν» (3.70.6) — ειδ. απαρ. από ρ. αντίληψης</li>
+      </ul>
+    </div>
+
+    <!-- Ε. ΓΛΩΣΣΙΚΕΣ ΙΔΙΑΙΤΕΡΟΤΗΤΕΣ -->
+    <div class="section-title" style="margin-top:32px;">Ε. ΓΛΩΣΣΙΚΕΣ ΙΔΙΑΙΤΕΡΟΤΗΤΕΣ <span class="sos sos-badge sos-3">★★★ ΣΦΑΙΡΑ</span></div>
+
+    <div class="reveal card">
+      <div class="card-title">Θουκυδίδης — Αρχαϊσμοί (ΔΙΑΓΝΩΣΤΙΚΟ)</div>
+      <table class="rpg-table">
+        <thead><tr><th>Αρχαϊσμός</th><th>Κανονικός τύπος</th><th>Παράδειγμα</th></tr></thead>
+        <tbody>
+          <tr><td>ἐς</td><td>εἰς</td><td>ἐς τὴν Κέρκυραν</td></tr>
+          <tr><td>ξύν, ξυν-</td><td>σύν, συν-</td><td>ξυνέγραψε, ξυμμαχία</td></tr>
+          <tr><td>σσ</td><td>ττ</td><td>ἡσσῶντο (= ἡττῶντο)</td></tr>
+          <tr><td>αἰεί</td><td>ἀεί</td><td>κτῆμα ἐς αἰεί</td></tr>
+          <tr><td>ἐξαπιναίως</td><td>ἐξαπίνης</td><td>3.70.6</td></tr>
+          <tr><td>ουδέτερο ως επίρρ.</td><td>-ως</td><td>ὁμοῖα = ὁμοίως</td></tr>
+          <tr><td>ουδέτερο ως αφηρ. ουσ.</td><td>ουσ. σε -ία/-σύνη</td><td>τὸ εὔδαιμον = εὐδαιμονία</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- HACK 9 -->
+    <div class="reveal hack-wrap">
+      <button class="hack-btn" onclick="toggleHack(this)">
+        <span class="icon">🔬</span>
+        REVEAL HACK #9 — Αρχαϊσμοί Θουκ.: «ΕΞΣ = Εξ / Ξ / Σσ»
+        <span class="chevron">▼</span>
+      </button>
+      <div class="hack-body">
+        <strong>Τρεις αρχαϊσμοί που πρέπει να αναγνωρίζεις αμέσως:</strong>
+        <div class="mnemonic">ΕΞΣ:<br>Ε → ἐς (= εἰς) — ΠΑΝΤΑ στον Θουκ., ΟΧΙ στη νεότερη αττική<br>Ξ → ξύν / ξυν- (= σύν / συν-) — ξυμμαχία, ξυνέγραψε, ξυγκαλέω<br>Σ → σσ (= ττ) — ἡσσῶντο, πράσσω (θουκ. αντί πράττω)</div>
+        <strong>Εξεταστικό κόλπο:</strong> Αν ρωτηθείς να αναγνωρίσεις αρχαϊσμούς Θουκ. σε κείμενο, ΠΡΩΤΑ κοίτα για ξ-, ε-, σσ. Μόνο αυτοί οι 3 σε ξεχωρίζουν από άλλους αρχαίους πεζογράφους!
+      </div>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Ξενοφών — Ειδικές Παρατηρήσεις</div>
+      <ul class="loot">
+        <li>Στον πλάγιο λόγο αποφεύγει ευκτική — διατηρεί οριστική (ευκτ. μόνο στα πολύ εξαρτημένα)</li>
+        <li>Άμεσος λόγος για ζωντάνια: «οὗ ὄντες ναυμαχήσετε, ὅταν βούλησθε» (Ξεν. 2.1.25)</li>
+        <li>Χρήση μεταφοράς-εικόνας: «συνέλεξεν» (= «έπιασε σαν ψάρια» τους ναύτες, 2.1.28)</li>
+        <li>«τριταῖος»: ρηματικό επίθετο αντί χρονικής μτχ.</li>
+      </ul>
+    </div>
+
+    <!-- ΣΤ. ΟΥΣΙΑΣΤΙΚΑ -->
+    <div class="section-title" style="margin-top:32px;">ΣΤ. ΟΥΣΙΑΣΤΙΚΑ — ΣΥΝΗΡΗΜΕΝΑ &amp; ΑΝΩΜΑΛΑ <span class="sos sos-badge sos-2">★★</span></div>
+
+    <div class="reveal card">
+      <table class="rpg-table">
+        <thead><tr><th>Ουσιαστικό</th><th>Κλίση / Τύπος</th><th>Σημείωση</th></tr></thead>
+        <tbody>
+          <tr><td>νεώριον (ναύσταθμος)</td><td>2η κλ. αττικόκλιτο</td><td>γεν.: νεωρίου</td></tr>
+          <tr><td>νεώς (ναός)</td><td>2η κλ. αττικόκλιτο</td><td>γεν.: νεώ</td></tr>
+          <tr><td>ὁ λεώς (= ὁ λαός)</td><td>2η κλ. αττικόκλιτο</td><td>γεν.: λεώ</td></tr>
+          <tr><td>ναῦς</td><td>3η κλ. ανώμαλο</td><td>γεν. νεώς, δοτ. νηί/νεΐ, αιτ. ναῦν | πληθ. νῆες/νεῶν/ναυσί/ναῦς</td></tr>
+          <tr><td>βοῦς (= βόας)</td><td>2η κλ. ανώμαλο</td><td>γεν. βοός, αιτ. βοῦν</td></tr>
+          <tr><td>χείρ</td><td>3η κλ. ανώμαλο</td><td>γεν. χειρός | χεῖρε, χεῖρες, χειρῶν, χερσί</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Ζ. ΣΥΧΝΑ ΡΗΜΑΤΑ -->
+    <div class="section-title" style="margin-top:32px;">Ζ. ΣΥΧΝΑ ΡΗΜΑΤΑ — Ανώμαλοι Τύποι <span class="sos sos-badge sos-3">★★★</span></div>
+
+    <div class="reveal">
+      <table class="rpg-table">
+        <thead><tr><th>Αρχαία Ελληνικά</th><th>Σημασία / Σχόλιο</th></tr></thead>
+        <tbody>
+          <tr><td>ἀφίεμαι (ἀφεθέντες)</td><td>ελευθερώνομαι, αφήνομαι</td></tr>
+          <tr><td>ὀφλισκάνω (ὀφλόντων)</td><td>καταδικάζομαι να πληρώσω</td></tr>
+          <tr><td>ἀποφεύγω (ἀποφυγών)</td><td>αθωώνομαι (δικαστ. τεχν.)</td></tr>
+          <tr><td>προΐσταμαι (προειστήκει)</td><td>είμαι αρχηγός (ιστ. παρακείμ.)</td></tr>
+          <tr><td>ἐπικυρόω (ἐπικυρῶσαι)</td><td>επικυρώνω — απαρ. αορ.</td></tr>
+          <tr><td>κατέθεντο (κατατίθεμαι)</td><td>φυλακίζω</td></tr>
+          <tr><td>ἡσσῶντο (ἡσσάομαι)</td><td>νικιέμαι (αττ. ἡττῶμαι)</td></tr>
+          <tr><td>περιεχεῖτο (περιχέομαι)</td><td>χύνομαι γύρω</td></tr>
+          <tr><td>εἷλκε (ἕλκω)</td><td>σέρνω — αόρ. β΄: εἵλκυσα</td></tr>
+          <tr><td>ἀπεχρῶντο (ἀποχράομαι)</td><td>σκοτώνω (ευφημισμός)</td></tr>
+          <tr><td>ἀπήγχοντο (ἀπάγχομαι)</td><td>απαγχονίζομαι — παρατατ.</td></tr>
+          <tr><td>κεκρατηκότος (κρατέω)</td><td>κρατῶ — συνθ. παρακείμ. (γεν. απόλ.)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Η. ΣΥΝΘΕΤΑ ΡΗΜΑΤΑ -->
+    <div class="section-title" style="margin-top:32px;">Η. ΣΥΝΘΕΤΑ ΡΗΜΑΤΑ <span class="sos sos-badge sos-2">★★</span></div>
+
+    <div class="reveal card">
+      <table class="rpg-table">
+        <thead><tr><th>Σύνθετο Ρήμα</th><th>Αντίστοιχο Απλό</th><th>Σημασία</th></tr></thead>
+        <tbody>
+          <tr><td>ἀν-τ-ανάγω</td><td>ἄγω</td><td>βγάζω κι εγώ πλοία για αντιμετώπιση</td></tr>
+          <tr><td>ξυμ-παρ-ῄει (ξυμπάρειμι)</td><td>εἶμι</td><td>συμπορεύομαι παράλληλα</td></tr>
+          <tr><td>ὑπ-εξ-ανάγομαι</td><td>ἄγω</td><td>ανοίγομαι κρυφά στο πέλαγος</td></tr>
+          <tr><td>προ-κατα-φεύγω</td><td>φεύγω</td><td>προλαβαίνω να διαφύγω</td></tr>
+          <tr><td>ξυν-ίσταμαι</td><td>ἵσταμαι</td><td>συνωμοτώ</td></tr>
+          <tr><td>ξυγ-καλέω</td><td>καλέω</td><td>συγκαλώ σε συνέλευση</td></tr>
+          <tr><td>ἀντ-υπ-άγω</td><td>ἄγω/ὑπάγω</td><td>κάνω αντιμήνυση</td></tr>
+          <tr><td>περι-οικοδομέομαι</td><td>οἰκοδομέω</td><td>περιτειχίζομαι</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Θ. ΓΡΑΜΜΑΤΙΚΑ ΦΑΙΝΟΜΕΝΑ -->
+    <div class="section-title" style="margin-top:32px;">Θ. ΓΡΑΜΜΑΤΙΚΑ ΦΑΙΝΟΜΕΝΑ ΙΔΙΑΙΤΕΡΑ <span class="sos sos-badge sos-3">★★★</span></div>
+
+    <div class="reveal card">
+      <div class="card-title">Γεν. Διαιρετική — Κατηγορηματική</div>
+      <ul class="loot">
+        <li>«ἐτύγχανε γὰρ καὶ <strong>βουλῆς ὤν</strong>» (3.70.5): γεν. κατηγορηματική (ανήκει στη βουλή)</li>
+        <li>«σφῶν αὐτῶν τοὺς ἐχθροὺς δοκοῦντας» (3.81.4): γεν. διαιρετική</li>
+        <li>«ὀφλόντων αὐτῶν διὰ πλῆθος τῆς ζημίας» (3.70.5): γεν. απόλυτη</li>
+      </ul>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Σχήματα Λόγου Θουκυδίδη</div>
+      <ul class="loot">
+        <li><strong>ΠΑΡΙΣΟΝ:</strong> ίσος αριθμός συλλαβών — αντιστοιχία λέξεων ανάμεσα σε φράσεις</li>
+        <li><strong>ΟΜΟΙΟΤΕΛΕΥΤΟ:</strong> ίδιες καταλήξεις — «λαμπρότατον... δυστυχέστατον» (7.87.5)</li>
+        <li><strong>ΑΝΤΙΘΕΣΗ:</strong> τῷ μὲν λόγῳ / ἔργῳ δέ &nbsp;│&nbsp; οἱ ὀλίγοι / ὁ δῆμος</li>
+        <li><strong>ΑΝΑΦΟΡΑ:</strong> δέ (μεταβατικό) στον Ξενοφώντα = αφηγηματική σύνδεση</li>
+      </ul>
+    </div>
+
+    <div class="reveal card">
+      <div class="card-title">Δύσκολα Συντακτικά — ΣΦΑΙΡΑ</div>
+      <ul class="loot">
+        <li>«νομίζοντες... τῇ Ἑλλάδι <strong>ἄρχειν τῆς ἐλευθερίας</strong>» (Ξεν. 2.2.23): ἄρχειν τινός = αρχίζω κάτι</li>
+        <li>«<strong>συνδοκοῦν ἅπασιν ἡμῖν</strong>» (Ξεν. 3.51): ΑΙΤΙΑΤΙΚΗ ΑΠΟΛΥΤΗ (ανεξάρτητη)</li>
+        <li>«εἰ μὴ Νικόστρατος ἐκώλυσε, <strong>διέφθειραν ἄν</strong>» (3.75.4): ανεκπλήρωτος υποθετικός</li>
+        <li>«τὴν μὲν αἰτίαν ἐπιφέροντες» (3.81.4): μτχ. αντί γεν. απόλ. (σχήμα ανακόλουθο)</li>
+        <li>«δίκην ὑποσχεῖν ἔπεισαν... <strong>κατέγνωσαν πάντων θάνατον</strong>» (3.81.2): εντελώς αντίθετα ρ. — σκόπιμη ειρωνεία</li>
+      </ul>
+    </div>
+
+    <!-- HACK 10 -->
+    <div class="reveal hack-wrap">
+      <button class="hack-btn" onclick="toggleHack(this)">
+        <span class="icon">🏆</span>
+        REVEAL HACK #10 — ΤΕΛΙΚΟ BOSS HACK: Αντίθεση «τῷ μὲν λόγῳ / ἔργῳ δέ»
+        <span class="chevron">▼</span>
+      </button>
+      <div class="hack-body">
+        <strong>Αυτή η αντίθεση είναι η πιο χαρακτηριστική θουκυδίδεια έκφραση — εμφανίζεται παντού:</strong>
+        <div class="mnemonic">τῷ μὲν λόγῳ = «τυπικά / επίφαση»<br>ἔργῳ δέ = «ουσιαστικά / πραγματικότητα»</div>
+        <strong>Χρήσεις στα κείμενά μας:</strong><br>
+        • Κεφ. 70: Ολιγαρχικοί ψηφίζουν «τυπικά» ουδετερότητα — ουσιαστικά προετοιμάζονται<br>
+        • Κεφ. 71: Συγκαλούν Εκκλησία «τυπικά» — ουσιαστικά εξαναγκάζουν<br><br>
+        <strong>Μνημοτεχνική:</strong> «Λόγος = το ΛΟΓΟ στα media» (κατασκευασμένο) vs «Έργο = η ΠΡΑΞΗ» (αλήθεια). Ο Θουκυδίδης δείχνει πάντα και τα δύο.
+      </div>
+    </div>
+
+  </section>
+</article>
+
+<!-- ══════════════════════════════════════════
+     REVISION CARDS
+════════════════════════════════════════════ -->
+<section class="revision-section" id="revision">
+  <h2>⚡ ΤΑΧΕΙΑ ΑΝΑΦΟΡΑ — REVISION CARDS</h2>
+  <div class="revision-grid">
+
+    <div class="rev-card rc-p reveal">
+      <h4>🏛️ ΘΟΥΚΥΔΙΔΗΣ — 10 Σημεία SOS</h4>
+      <ol>
+        <li>Αμφίπολη (424) → εξορία 20 ετών → «κτῆμα ἐς αἰεί»</li>
+        <li>Μέθοδος: αυτοψία + «οὐκ ἐκ τοῦ παρατυχόντος»</li>
+        <li>Δημηγορίες: κεντρική ιδέα + «ξυμπάσης γνώμης»</li>
+        <li>Φύση ανθρώπου: «ἕως ἂν ἡ αὐτὴ φύσις ἀνθρώπων ᾖ»</li>
+        <li>Πόλεμος = «βίαιος διδάσκαλος» — αλλαγή λέξεων</li>
+        <li>Αίτιο: πλεονεξία + φιλοτιμία — αθηναϊκή ἀρχή</li>
+        <li>Γλώσσα: ἐς/ξύν/σσ/αἰεί/ουδ. ως επίρρ./αντίθεση/πάρισα</li>
+        <li>Κέρκυρα 81: «πᾶσα ἰδέα κατέστη θανάτου»</li>
+        <li>Κέρκυρα 82-83: αλλαγή αξιών, ψυχολογία, κατώτεροι</li>
+        <li>Ημιτελής: 411 π.Χ. — 8ο βιβλίο χωρίς δημηγορίες</li>
+      </ol>
+    </div>
+
+    <div class="rev-card rc-g reveal">
+      <h4>📜 ΞΕΝΟΦΩΝ — 10 Σημεία SOS</h4>
+      <ol>
+        <li>431-429 π.Χ. Ερχιά — Σωκράτης — Αναβ. Κύρου (401) — Σκιλλούς</li>
+        <li>Πρότυπα: Σωκράτης (ηθικά) + Αγησίλαος (ηγεσία)</li>
+        <li>Ελληνικά = 411-362 π.Χ. — «στρωματική σύνθεση»</li>
+        <li>Στυλ: σαφήνεια, ζωντάνια «ρεπόρτερ», δραματικές σκηνές</li>
+        <li>Ελλ. 2.1: Λύσανδρος = κεντρικό πρόσωπο — δέ μεταβατικό</li>
+        <li>Ελλ. 2.2: §3 νύχτα — «οἰμωγὴ... ὥστε οὐδεὶς ἐκοιμήθη»</li>
+        <li>Ελλ. 2.2: §23 τείχη «ὑπ᾽ αὐλητρίδων» — σύμβολο ειρωνείας</li>
+        <li>Ελλ. 2.3: Τριάκοντα — κλιμάκωση — ρήξη Κριτία-Θηραμένη</li>
+        <li>Ελλ. 2.3.50-56: Δίκη Θηραμένη — «Κριτίᾳ τοῦτ᾽ ἔστω»</li>
+        <li>Ελλ. 2.4: Θρασύβουλος — μάντης — Κλεόκριτος — Δέκα</li>
+      </ol>
+    </div>
+
+    <div class="rev-card rc-v reveal">
+      <h4>⚙️ ΓΡΑΜΜΑΤΙΚΗ — 8 Κρίσιμα</h4>
+      <ol>
+        <li>Γεν. Απόλ. vs Αιτ. Απόλ.: «συνδοκοῦν» = ΑΙΤΙΑΤΙΚΗ</li>
+        <li>Ευκτ. ΠΛ. ΛΟΓΟΥ (ιστ. χρ.) ≠ Δυνητική (ἄν) ≠ Επαναληπτ.</li>
+        <li>Ιστ. ενεστώτας: «αἱροῦσι κατὰ κράτος» — ζωηρότητα</li>
+        <li>Παρατ./Αόρ. αλλαγή: διάρκεια → εφάπαξ (Ξεν. 2.1.16-28)</li>
+        <li>Θουκ. αρχαϊσμοί: ξύν/ἐς/σσ — ΔΙΑΓΝΩΣΤΙΚΟ</li>
+        <li>Μτχ. αντί δευτ. πρότ.: βάθος + ταχύτητα (θουκ. τεχνική)</li>
+        <li>«τῷ μὲν λόγῳ... ἔργῳ δέ» = τυπικό θουκ. σχήμα</li>
+        <li>Σχήματα ύφους: ΠΑΡΙΣΑ + ΟΜΟΙΟΤΕΛΕΥΤΑ + ΑΝΤΙΘΕΣΕΙΣ</li>
+      </ol>
+    </div>
+
+  </div>
+</section>
+</div><!-- /locked-content -->
+
+<footer>
+  ⚔️ STUDY DUNGEON v1.0 · Αρχαίοι Έλληνες Ιστοριογράφοι Α΄ Λυκείου<br>
+  Θουκυδίδης &amp; Ξενοφών · Εξεταστέα Ύλη σσ. 18-33 · Ελληνικά Βιβ. 2 · Ιστορίαι Βιβ. 3<br>
+  <span style="color:var(--neon-y)">«κτῆμα ἐς αἰεί»</span>
+</footer>
+
+</main>
+
+<script>
+// ============================================================
+// VALID ACCESS CODES — Freemium Model
+// Admin: add or remove codes from the array below.
+// Any code in this list will be accepted.
+// ============================================================
+const validCodes = [
+  /* ── AUTO-GENERATED CODES ── */
+  'A7X9K2P4',
+  'R3M8Q5TZ',
+  'BN2KL7WF',
+  'H6DX4YP9',
+  'GC5VU1EM',
+  'ZJ8FN3SR',
+  'TW4K9LQ2',
+  'PM7E6XBY',
+  'YD1XH8CQ',
+  'VK3NW2RF',
+  /* ── ADMIN CODES — add your custom codes below ── */
+  // 'YOURCODE1',
+  // 'PROMO2025',
+];
+
+// ── ACCESS CONTROL ──
+function checkAccess() {
+  return localStorage.getItem('hasAccess') === 'true';
+}
+
+function grantAccess() {
+  localStorage.setItem('hasAccess', 'true');
+  const locked = document.getElementById('locked-content');
+  const unlockSec = document.getElementById('unlock-section');
+  if (locked) locked.style.display = '';
+  if (unlockSec) unlockSec.style.display = 'none';
+}
+
+function showToast(msg, isError) {
+  let toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.className = isError ? 'error' : '';
+  void toast.offsetWidth;
+  toast.classList.add('show');
+  clearTimeout(toast._hideTimer);
+  toast._hideTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+}
+
+function handleUnlock() {
+  const input = document.getElementById('unlock-code-input');
+  const code = (input ? input.value : '').trim().toUpperCase();
+  if (validCodes.indexOf(code) !== -1) {
+    showToast('ΠΡΟΣΒΑΣΗ ΕΓΚΡΙΘΗΚΕ!', false);
+    setTimeout(grantAccess, 900);
+  } else {
+    showToast('Λάθος Κωδικός. Δοκίμασε ξανά.', true);
+    if (input) { input.value = ''; input.focus(); }
+  }
+}
+
+// Check access on load & wire Enter key
+document.addEventListener('DOMContentLoaded', function() {
+  const inp = document.getElementById('unlock-code-input');
+  if (inp) inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleUnlock();
+  });
+  if (checkAccess()) grantAccess();
+});
+
+// ── PROGRESS BAR ──
+const bar = document.getElementById('progress-bar-inner');
+const lbl = document.getElementById('progress-label');
+const xpEl = document.getElementById('progress-xp');
+const levels = ['#l1','#l2','#l3','#l4','#l5'];
+
+function updateProgress() {
+  const scrollTop = window.scrollY || window.pageYOffset;
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docH > 0 ? (scrollTop / docH) * 100 : 0;
+  bar.style.width = Math.min(pct, 100) + '%';
+  const xp = Math.round(pct * 15);
+  xpEl.textContent = xp + ' XP';
+
+  let currentLevel = 0;
+  levels.forEach((sel, i) => {
+    const el = document.querySelector(sel);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= window.innerHeight / 2) currentLevel = i + 1;
+    }
+  });
+  lbl.textContent = 'LVL ' + currentLevel + ' / 5';
+}
+window.addEventListener('scroll', updateProgress, { passive: true });
+updateProgress();
+
+// ── SCROLL REVEAL ──
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach((el, i) => {
+  el.style.transitionDelay = (i % 4) * 0.07 + 's';
+  observer.observe(el);
+});
+
+// ── HACK ACCORDION ──
+function toggleHack(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+  btn.classList.toggle('open', !isOpen);
+  if (!isOpen) {
+    body.classList.add('visible');
+    // XP reward
+    const xpCurr = parseInt(xpEl.textContent) || 0;
+    xpEl.textContent = (xpCurr + 150) + ' XP';
+    xpEl.style.color = '#ffd700';
+    xpEl.style.transform = 'scale(1.3)';
+    setTimeout(() => {
+      xpEl.style.transform = 'scale(1)';
+    }, 300);
+  } else {
+    body.classList.remove('visible');
+  }
+}
+
+// ── SMOOTH SCROLL for nav ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      window.scrollTo({
+        top: target.getBoundingClientRect().top + window.pageYOffset - 60,
+        behavior: 'smooth'
+      });
+    }
+  });
+});
+</script>
+
+</body>
+</html>

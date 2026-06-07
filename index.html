@@ -2194,68 +2194,7 @@ footer {
 </main>
 
 <script>
-// ============================================================
-// VALID ACCESS CODES — Freemium Model
-// Admin: add or remove codes from the array below.
-// Any code in this list will be accepted.
-// ============================================================
-const validCodes = [
-  /* ── AUTO-GENERATED CODES ── */
-  'A7X9K2P4',
-  'R3M8Q5TZ',
-  'BN2KL7WF',
-  'H6DX4YP9',
-  'GC5VU1EM',
-  'ZJ8FN3SR',
-  'TW4K9LQ2',
-  'PM7E6XBY',
-  'YD1XH8CQ',
-  'VK3NW2RF',
-  /* ── ADMIN CODES — add your custom codes below ── */
-  // 'YOURCODE1',
-  // 'PROMO2025',
-];
-
-// ── ACCESS CONTROL ──
-function checkAccess() {
-  return localStorage.getItem('hasAccess') === 'true';
-}
-
-function grantAccess() {
-  localStorage.setItem('hasAccess', 'true');
-  const locked = document.getElementById('locked-content');
-  const unlockSec = document.getElementById('unlock-section');
-  if (locked) locked.style.display = '';
-  if (unlockSec) unlockSec.style.display = 'none';
-}
-
-function showToast(msg, isError) {
-  let toast = document.getElementById('toast');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'toast';
-    document.body.appendChild(toast);
-  }
-  toast.textContent = msg;
-  toast.className = isError ? 'error' : '';
-  void toast.offsetWidth;
-  toast.classList.add('show');
-  clearTimeout(toast._hideTimer);
-  toast._hideTimer = setTimeout(() => toast.classList.remove('show'), 3200);
-}
-
-function handleUnlock() {
-  const input = document.getElementById('unlock-code-input');
-  const code = (input ? input.value : '').trim().toUpperCase();
-  if (validCodes.indexOf(code) !== -1) {
-    showToast('ΠΡΟΣΒΑΣΗ ΕΓΚΡΙΘΗΚΕ!', false);
-    setTimeout(grantAccess, 900);
-  } else {
-    showToast('Λάθος Κωδικός. Δοκίμασε ξανά.', true);
-    if (input) { input.value = ''; input.focus(); }
-  }
-}
-
+const _0x4a9773=_0x14e5;(function(_0x523c9e,_0x86e004){const _0x3b2093=_0x14e5,_0x1cef39=_0x523c9e();while(!![]){try{const _0x23df91=parseInt(_0x3b2093(0x78))/0x1*(-parseInt(_0x3b2093(0x89))/0x2)+parseInt(_0x3b2093(0x84))/0x3*(parseInt(_0x3b2093(0x7d))/0x4)+-parseInt(_0x3b2093(0x83))/0x5*(-parseInt(_0x3b2093(0x87))/0x6)+-parseInt(_0x3b2093(0x80))/0x7+parseInt(_0x3b2093(0x69))/0x8*(-parseInt(_0x3b2093(0x8f))/0x9)+parseInt(_0x3b2093(0x6e))/0xa*(-parseInt(_0x3b2093(0x86))/0xb)+parseInt(_0x3b2093(0x76))/0xc*(parseInt(_0x3b2093(0x8b))/0xd);if(_0x23df91===_0x86e004)break;else _0x1cef39['push'](_0x1cef39['shift']());}catch(_0x46418a){_0x1cef39['push'](_0x1cef39['shift']());}}}(_0x1a39,0x4c2d0));const validCodes=[_0x4a9773(0x6b),_0x4a9773(0x7f),_0x4a9773(0x88),_0x4a9773(0x68),_0x4a9773(0x7b),_0x4a9773(0x73),_0x4a9773(0x71),'PM7E6XBY',_0x4a9773(0x74),_0x4a9773(0x75)];function checkAccess(){const _0x339d35=_0x4a9773;return localStorage[_0x339d35(0x70)]('hasAccess')==='true';}function grantAccess(){const _0x5b31e9=_0x4a9773;localStorage[_0x5b31e9(0x7a)](_0x5b31e9(0x6f),'true');const _0x39e1f5=document[_0x5b31e9(0x65)](_0x5b31e9(0x8a)),_0x34cb72=document[_0x5b31e9(0x65)](_0x5b31e9(0x77));if(_0x39e1f5)_0x39e1f5[_0x5b31e9(0x81)][_0x5b31e9(0x6d)]='';if(_0x34cb72)_0x34cb72['style'][_0x5b31e9(0x6d)]='none';}function showToast(_0xf4b16b,_0x2a96c7){const _0x594a20=_0x4a9773;let _0x32d86d=document[_0x594a20(0x65)](_0x594a20(0x6a));!_0x32d86d&&(_0x32d86d=document['createElement'](_0x594a20(0x7e)),_0x32d86d['id']='toast',document['body'][_0x594a20(0x8c)](_0x32d86d)),_0x32d86d['textContent']=_0xf4b16b,_0x32d86d[_0x594a20(0x79)]=_0x2a96c7?_0x594a20(0x90):'',void _0x32d86d[_0x594a20(0x66)],_0x32d86d[_0x594a20(0x6c)]['add']('show'),clearTimeout(_0x32d86d[_0x594a20(0x82)]),_0x32d86d[_0x594a20(0x82)]=setTimeout(()=>_0x32d86d[_0x594a20(0x6c)][_0x594a20(0x7c)]('show'),0xc80);}function _0x14e5(_0x209bf0,_0x4b8fda){_0x209bf0=_0x209bf0-0x65;const _0x1a396f=_0x1a39();let _0x14e5d9=_0x1a396f[_0x209bf0];return _0x14e5d9;}function handleUnlock(){const _0x5e2f5a=_0x4a9773,_0xbda643=document['getElementById'](_0x5e2f5a(0x72)),_0x30d0f6=(_0xbda643?_0xbda643['value']:'')[_0x5e2f5a(0x8d)]()['toUpperCase']();validCodes[_0x5e2f5a(0x67)](_0x30d0f6)!==-0x1?(showToast('ΠΡΟΣΒΑΣΗ\x20ΕΓΚΡΙΘΗΚΕ!',![]),setTimeout(grantAccess,0x384)):(showToast(_0x5e2f5a(0x85),!![]),_0xbda643&&(_0xbda643[_0x5e2f5a(0x91)]='',_0xbda643[_0x5e2f5a(0x8e)]()));}function _0x1a39(){const _0x2061eb=['locked-content','26ypIdCL','appendChild','trim','focus','198GTPulb','error','value','getElementById','offsetWidth','indexOf','H6DX4YP9','85576teHrZg','toast','A7X9K2P4','classList','display','99140jFmrHK','hasAccess','getItem','TW4K9LQ2','unlock-code-input','ZJ8FN3SR','YD1XH8CQ','VK3NW2RF','5860788BOVHYH','unlock-section','57652yrNdRA','className','setItem','GC5VU1EM','remove','135924YRNiUi','div','R3M8Q5TZ','2898903PmErGy','style','_hideTimer','5rkgIjq','45jmaFXt','Λάθος\x20Κωδικός.\x20Δοκίμασε\x20ξανά.','429efOahw','1936968LQqGAk','BN2KL7WF','16obUbeV'];_0x1a39=function(){return _0x2061eb;};return _0x1a39();}
 // Check access on load & wire Enter key
 document.addEventListener('DOMContentLoaded', function() {
   const inp = document.getElementById('unlock-code-input');
